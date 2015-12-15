@@ -1,0 +1,290 @@
+/* css Zen Garden default style v1.02 */
+/* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
+
+/* This file based on 'Tranquille' by Dave Shea */
+/* You may use this file as a foundation for any new work, but you may find it easier to start from scratch. */
+/* Not all elements are defined in this file, so you'll most likely want to refer to the xhtml as well. */
+
+/* Your images should be linked as if the CSS file sits in the same folder as the images. ie. no paths. */
+
+
+/* basic elements */
+html {
+	margin: 0;
+	padding: 0;
+	background-color:#eeeeee;
+	}
+body {
+	font: 85% georgia, helvetica, sans-serif;
+	line-height: 1.88889;
+	color: #555753;
+	margin: 0;
+	padding: 0;
+	}
+p {
+	margin-top: 0;
+	text-align: justify;
+	}
+h2 {
+	font: bold 4em georgia, helvetica, sans-serif;
+	letter-spacing: 1px;
+	margin-bottom: 0;
+	color: #1D171C;
+	}
+h3 {
+	font: bold 1.4em georgia, helvetica, sans-serif;
+	letter-spacing: 1px;
+	margin-bottom: 4;
+	text-decoration: underline;
+	color: #7D775C;
+	}
+h4 {
+	font: bold 1em georgia, helvetica, sans-serif;
+	letter-spacing: 1px;
+	margin-bottom: 3;
+	color: #7D775C;
+	}
+a:link {
+	font-weight: bold;
+	text-decoration: none;
+	color: #0000FF;
+	}
+a:visited {
+	font-weight: bold;
+	text-decoration: none;
+	color: #0000FF;
+	}
+a:hover, a:focus, a:active {
+	text-decoration: underline;
+	color: #0000FF;
+	}
+abbr {
+	border-bottom: none;
+	}
+
+/* button and other changes by Shyam */
+.presetColor {
+	text-decoration: underline;
+	padding-left:4px;
+	padding-right: 4px;
+}
+.btn {
+	background: #555753;
+	border-radius: 12px;
+	border-style: none;
+	color: #dddddd;
+	font: 1.2em georgia, helvetica, sans-serif;
+	padding: 5px 10px 5px 10px;
+	text-decoration: none;
+	margin: 0px 5px 0px 5px;
+	}
+.btn:hover {
+  background: #757773;
+  background-image: -webkit-linear-gradient(top, #757773, #555753);
+  background-image: -moz-linear-gradient(top, #757773, #555753);
+  background-image: -ms-linear-gradient(top, #757773, #555753);
+  background-image: -o-linear-gradient(top, #757773, #555753);
+  background-image: linear-gradient(to bottom, #757773, #555753);
+  text-decoration: none;
+	}
+.spList {
+	font: georgia, helvetica, sans-serif;
+	color: #555753;
+	width: 230px;
+	border: none;
+	margin: 3px 3px 3px 3px;
+}
+.spListDiv {
+	width:236px;
+	background-color: #757773;
+	border-radius: 5px;
+	margin-top: 10px;
+	float:left;
+}
+
+/* Code from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
+input[type=range] {
+    /*removes default webkit styles*/
+    -webkit-appearance: none;
+
+    /*fix for FF unable to apply focus style bug */
+    border: 1px solid white;
+
+    /*required for proper track sizing in FF*/
+    width: 300px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -4px;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+
+input[type=range]::-moz-range-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]::-ms-track {
+    width: 300px;
+    height: 5px;
+
+    /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    background: transparent;
+
+    /*leave room for the larger thumb to overflow with a transparent border */
+    border-color: transparent;
+    border-width: 6px 0;
+
+    /*remove default tick marks*/
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #777;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: goldenrod;
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #b3b7b5;
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #737775;
+}
+/* End Code from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html*/
+
+/* specific divs */
+#header{
+	height:120px;
+	background-image: url(/images/diversity_of_species.jpg);
+	border: 1px solid;
+	width:1100px;
+}
+/*#floating-panel {
+  position: absolute;
+  top: 60%;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#floating-panel {
+	background: #fff;
+	padding: 5px;
+	font-size: 14px;
+	font-family: Arial;
+	border: 1px solid #ccc;
+	box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+	display: none;
+}*/
+#main {
+	width:1100px;
+	margin: 0;
+}
+#mymap {
+	width:1050px;
+	height:600px;
+	border-style: double;
+	float:left;
+	margin: 10px 25px 10px 25px;
+}
+#speciesControl {
+	width:300px;
+	float: left;
+	margin:0px 0px 0px 25px;
+}
+#speciesRadio {
+	width:300px;
+	float: left;
+	margin-top: 5px;
+}
+#plotControl {
+	width:300px;
+	float:left;
+}
+#presetColorDiv {
+	width: inherit;
+	margin: 0px 0px 3px 0px;
+	float: left;
+}
+#buttons {
+	width:300px;
+	float: none;
+	clear: both;
+	text-align: center;
+	margin-top:70px;
+}
+#plotsymbDiv {
+	width:180px;
+	float:left;
+}
+#showGridDiv {
+	width:120px;
+	float:right;
+}
+#minmaxDiv{
+	width:inherit;
+	font: georgia, helvetica, sans-serif;
+	margin:0px 0px 26px 0px;
+}
+#infoDiv {
+	width:390px;
+	float:right;
+	margin: 0px 25px 0px 60px;
+	overflow-y: auto;
+	overflow-x: auto;
+	height:300px;
+}
+footer {
+	text-align: center;
+	}
+footer a:link, footer a:visited {
+	margin-right: 20px;
+	}

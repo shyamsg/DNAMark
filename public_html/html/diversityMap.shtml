@@ -1,0 +1,87 @@
+<html>
+<head>
+	<title>Diversity Map: Companion to paper</title>
+	<link rel="stylesheet" type="text/css" href="/code/css/mystyle.css">
+	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.js"></script>
+	<link ref="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.css" media="all">
+	<script src="/code/js/jscolor.js"></script>
+	<script src="/code/js/map.js"></script>
+	<!--script src="/code/js/dropdown.js"></script-->
+	<script src="/code/js/updateMap.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#mammals').show();
+			$('#amphibians').hide();
+			updateColorbar();
+		});
+	</script>
+	<noscript>Your browser does not support Javascript!</noscript>
+</head>
+<body>
+	<div id="header">
+		<h2 style="text-align:center"><b>Diversity Map</b></h2>
+	</div>
+	<div id="main">
+		<div id="speciesControl">
+			<h3>Species input controls</h3>
+			<h4>Species type </h4>
+			<div id="speciesRadio">
+				<input type="radio" name="speciesType" value="mammals" checked>
+				<span><b>Mammals</b> </span>
+				<input type="radio" name="speciesType" value="amphibians">
+				<span><b>Amphibians</b> </span>
+			</div>
+			<div id="mammals" class="spListDiv">
+				<!--#include virtual="/html/mammalsList.html"-->
+			</div>
+			<div id="amphibians" class="spListDiv">
+				<!--#include virtual="/html/amphibiansList.html"-->
+			</div>
+		</div>
+		<div id="plotControl">
+			<h3>Plotting controls</h3>
+			<h4>Plotting colors</h4>
+			<div id="presetColorDiv">
+				<center>
+				<a class="presetColor" onclick="grayscale()">Grayscale</a>
+				<a class="presetColor" onclick="heatmap()">Heatmap</a>
+				<a class="presetColor" onclick="blues()">Blues</a>
+				<a class="presetColor" onclick="reds()">Reds</a>
+				<a class="presetColor" onclick="greens()">Greens</a>
+			</center>
+			<input class="jscolor" id="startColor" value="FFFFFF" style="width:55px; text-align:center; border:1px dotted;">
+			<input class="jscolor" id="endColor" value="000000" style="width:55px; text-align:center; border:1px dotted; float:right">
+			<div id="colorbar"></div>
+			<div id="minmaxDiv">
+				<span id="minmeasure" style="float:left; text-align:left"></span>
+				<span id="maxmeasure" style="float:right; text-align:right"></span>
+			</div>
+			</div>
+			<div id="plotopacDiv">
+				<h4>Plotting opacity</h4>
+				<input id="opacity" type="range" min="0" max="100" value="50" >
+			</div>
+			<div id="plotsymbDiv">
+				<h4>Plotting symbol</h4>
+				<input type="radio" id="rectSymbol" name="symbol" value="rect" checked>
+				<span><b>Rectangle</b></span>
+				<input type="radio" id="circSymbol" name="symbol" value="circ">
+				<span><b>Circle</b></span>
+			</div>
+			<div id="showGridDiv">
+				<h4>Lat-Long Grid</h4>
+				<input type="checkbox" id="showGrid" name="showGrid">
+				<span><b>Show grid</b></span>
+			</div>
+			<div id="buttons">
+				<button class="btn" id="resetter" name="resetter">Reset Map</button>
+				<button class="btn" id="refresher" name="refresher">Refresh Map</button>
+			</div>
+		</div>
+		<div id="infoDiv"></div>
+		<div id="mymap"></div>
+	</div>
+</body>
+</html>

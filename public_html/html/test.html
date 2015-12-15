@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.js"></script>
+	<link ref="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.css" media="all">
+  <script>
+  var $element = $('input[type="range"]');
+  var $output = $('output');
+
+  function updateOutput(el, val) {
+    el.textContent = val;
+  }
+
+  $element
+    .rangeslider({
+      polyfill: false,
+      onInit: function() {
+        updateOutput($output[0], this.value);
+      }
+    })
+    .on('input', function() {
+      updateOutput($output[0], this.value);
+    });  </script>
+</head>
+<body>
+  <!--
+    rangeslider.js example
+
+    https://github.com/andreruffert/rangeslider.js
+    by André Ruffert - @andreruffert
+  -->
+
+  <h1>Vertical orientation support</h1>
+  <input type="range" data-orientation="vertical">
+  <output></output>
+</body>
+</html>
