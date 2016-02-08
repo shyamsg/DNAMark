@@ -12,7 +12,9 @@
 	<script src="/code/js/updateMap.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			$('#mammals').load("/html/mammalsList.html");
 			$('#mammals').show();
+			$('#amphibians').load("/html/amphibiansList.html");
 			$('#amphibians').hide();
 			updateColorbar();
 		});
@@ -35,10 +37,10 @@
 					<span><b>Amphibians</b> </span>
 				</div>
 				<div id="mammals" class="spListDiv">
-					<!--#include virtual="/html/mammalsList.html"-->
+					<!-- include virtual="/html/mammalsList.html" -->
 				</div>
 				<div id="amphibians" class="spListDiv">
-					<!--#include virtual="/html/amphibiansList.html"-->
+					<!-- include virtual="/html/amphibiansList.html" -->
 				</div>
 			</div>
 			<div id="plotControl">
