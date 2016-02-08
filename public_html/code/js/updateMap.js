@@ -2,11 +2,11 @@
 Code for grid on map.
 */
 // Define a symbol using SVG path notation, with an opacity of 1.
-var lineSymbol = {
-  path: 'M 0,-1 0,1',
-  strokeOpacity: 1,
-  scale: 2
-};
+// var lineSymbol = {
+//   path: 'M 0,-1 0,1',
+//   strokeOpacity: 1,
+//   scale: 2
+// };
 
 var gridLats = [];
 for (lat=-86; lat < 90; lat=lat+4){
@@ -47,8 +47,7 @@ function drawGrid() {
 }
 
 function clearGrid() {
-  // This function draws a grid on map at box edges using
-  // white transparent color.
+  // This function clears the grid off the map
   for (i=0; i < gridLats.length; i++) {
     gridLats[i].setMap(null);
   }
@@ -142,6 +141,8 @@ var shapesPlotted = [];
 var diversityMeasures = [];
 var nseqs = [];
 var nsps = [];
+var nbps = [];
+var nsegs = [];
 var infoHtmls = [];
 
 function getRadUpperLat(latitude) {
@@ -150,24 +151,30 @@ function getRadUpperLat(latitude) {
   return(latitude);
 }
 
-function attachListenerWithSeqMsg(rect, lat, lng, nsps, nseq, msg, diversity) {
+function attachListenerWithSeqMsg(rect, lat, lng, nsps, nseq, msg, diversity, nseg, nbp) {
   rect.addListener('click', function(msevent) {
-    updateInfoDiv(lat, lng, nsps, nseq, msg, diversity);
+    updateInfoDiv(lat, lng, nsps, nseq, msg, diversity, nseg, nbp);
   });
 }
 
-function updateInfoDiv(lat, lng, nsps, nseqs, infoString, diversity) {
+function updateInfoDiv(lat, lng, nsp, nseq, infoString, diversity, nseg, nbp) {
   htmlstr = "<h3>Information on chosen location</h3>";
   htmlstr += "<h4>Sampling grid location</h4>"
   htmlstr += "<b>Latitude:  </b>"+lat+"&nbsp;&nbsp;&nbsp;";
-  htmlstr += "<b>Longitude: </b>"+lng;
-  htmlstr += "<h4>Sampled species information</h4>"
-  htmlstr += "<b># species: "+nsps+"</b></br>";
-  htmlstr += "<b># sequences: "+nseqs+"</b></br>";
+  htmlstr += "<b>Longitude: </b>"+lng+"<br/>";
+  htmlstr += "<b># species: "+nsp+"</b>&nbsp;&nbsp;&nbsp;";
+  htmlstr += "<b># sequences: "+nseq+"</b></br>";
+  htmlstr += "<b># segregating sites: "+nseg+"</b>&nbsp;&nbsp;&nbsp;";
+  htmlstr += "<b># basepairs: "+nbp+"</b></br>";
   htmlstr += "<b>Diversity: "+diversity+"</b>";
-  htmlstr += "<h4><a href='http://www.ncbi.nlm.nih.gov/genbank/' target='_blank'>GenBank</a> information</h4>";
-  htmlstr += infoString;
   $('#infoDiv').html(htmlstr);
+  htmlstr = "<h4><a href='http://www.ncbi.nlm.nih.gov/genbank/' target='_blank'>GenBank</a> information</h4>";
+  htmlstr += "<table class='gentable'><thead><tr><th width='57%'>Species</th>"
+  htmlstr += "<th width='43%'>Accession</span></th></tr></thead>"
+  htmlstr += "<tbody>"
+  htmlstr += infoString;
+  htmlstr += "</tbody></table>"
+  $('#genbankDiv').html(htmlstr);
 }
 
 function showRectangles(lats, lngs) {
@@ -209,7 +216,7 @@ function showRectangles(lats, lngs) {
       strokeWeight: 0,
       clickable: true
     });
-    attachListenerWithSeqMsg(curRect, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i]);
+    attachListenerWithSeqMsg(curRect, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curRect);
   }
 }
@@ -244,7 +251,7 @@ function showCircles(lats, lngs) {
   var mxNseqs = Math.max.apply(Math, nseqs);
   var curSeqs = [];
   for (i=0; i < nseqs.length; i++) {
-    curSeqs.push(Math.log(nseqs[i])/Math.log(mxNseqs));
+    curSeqs.push(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1));
   }
   for (i=0; i < lats.length; i++) {
     var curCirc = new google.maps.Circle( {
@@ -257,7 +264,7 @@ function showCircles(lats, lngs) {
       strokeWeight: 0,
       clickable: true
     });
-    attachListenerWithSeqMsg(curCirc, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i]);
+    attachListenerWithSeqMsg(curCirc, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curCirc);
   }
 }
@@ -280,6 +287,44 @@ function switchShapes() {
   }
 }
 
+/*
+Vars for plotting range
+*/
+var rangeLats = [];
+var rangeLngs = [];
+var rangeBoxesPlotted = [];
+
+function clearRange() {
+  for (i=0; i < rangeBoxesPlotted.length; i++) {
+    rangeBoxesPlotted[i].setMap(null);
+  }
+}
+
+function drawRange() {
+  clearRange();
+  if (rangeLats.length == 0 || rangeLngs.length == 0 || rangeLats.length != rangeLngs.length) {
+    return 0;
+  }
+
+  for (i=0; i < rangeLats.length; i++) {
+      var curRangePath = [
+        {lat:rangeLats[i]-2, lng:rangeLngs[i]-2},
+        {lat:rangeLats[i]-2, lng:rangeLngs[i]+2},
+        {lat:rangeLats[i]+2, lng:rangeLngs[i]+2},
+        {lat:rangeLats[i]+2, lng:rangeLngs[i]-2},
+        {lat:rangeLats[i]-2, lng:rangeLngs[i]-2}
+      ];
+      rangeBox = new google.maps.Polyline({
+        path: curRangePath,
+        strokeColor: '#555555',
+        strokeOpacity: 1,
+        strokeWeight: 2
+      });
+      rangeBox.setMap(map);
+      rangeBoxesPlotted.push(rangeBox);
+  }
+}
+
 function colorMap(spType, species) {
   $.ajax({
     url: "/temp",
@@ -292,17 +337,23 @@ function colorMap(spType, species) {
     }
   });
 }
-
 function updateMap(response) {
     var obj = $.parseJSON(response);
     diversityMeasures = obj[2];
     nseqs = obj[3];
     infoHtmls = obj[4];
     nsps = obj[5];
+    nsegs = obj[6];
+    nbps = obj[7];
+    rangeLats = obj[8];
+    rangeLngs = obj[9];
     if ($('#rectSymbol').is(":checked")) {
       showRectangles(obj[0], obj[1]);
     } else {
       showCircles(obj[0], obj[1]);
+    }
+    if ($('#showRange').is(":checked")) {
+      drawRange();
     }
 }
 
@@ -344,6 +395,7 @@ $(document).ready(function() {
       spType = "amphibians";
     }
     $('#infoDiv').html("");
+    $('#genbankDiv').html("");
     var strDis = "";
     var species;
     if (spType == "mammals") {
@@ -367,6 +419,10 @@ $(document).ready(function() {
     $('#mammalNames').val('');
     $('#amphibianNames').val('');
     $('#chosenSpecies').val('');
+    $('#showRange').prop('checked', false);
+    clearRange();
+    $('#showGrid').prop('checked', false);
+    clearGrid();
     for (i=0; i < shapesPlotted.length; i++) {
       shapesPlotted[i].setMap(null);
     }
@@ -374,12 +430,20 @@ $(document).ready(function() {
     $('#minmeasure').html("");
     $('#maxmeasure').html("");
     $('#infoDiv').html("");
+    $('#genbankDiv').html("");
   });
   $('#showGrid').change(function(){
     if ($(this).is(":checked")) {
       drawGrid();
     } else {
       clearGrid();
+    }
+  });
+  $('#showRange').change(function(){
+    if ($(this).is(":checked")) {
+      drawRange();
+    } else {
+      clearRange();
     }
   });
   $('#startColor').change(function(){
@@ -406,6 +470,9 @@ $(document).ready(function() {
   $('input[name=symbol]').on('change', function() {
     switchShapes();
   });
+  // $('#amphibianNames').on('change', function() {
+  //   if (('#amphibianNames').prop('selected'))
+  // });
 //  $('input[type="range"]').on('input', function () {
 //    var percent = Math.ceil(((this.value - this.min) / (this.max - this.min)) * 100);
 //    $(this).css('background', '-webkit-linear-gradient(left, #757773 0%, #757773 ' + percent + '%, #B5B7B3 ' + percent + '%)');

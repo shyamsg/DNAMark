@@ -12,7 +12,7 @@
 html {
 	margin: 0;
 	padding: 0;
-	background-color:#eeeeee;
+	background-color:#ffffff;
 	}
 body {
 	font: 85% georgia, helvetica, sans-serif;
@@ -116,7 +116,7 @@ input[type=range] {
 input[type=range]::-webkit-slider-runnable-track {
     width: 300px;
     height: 5px;
-    background: #ddd;
+    background: #ccc;
     border: none;
     border-radius: 3px;
 }
@@ -126,7 +126,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
+    background: #777;
     margin-top: -4px;
 }
 input[type=range]:focus {
@@ -139,7 +139,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 input[type=range]::-moz-range-track {
     width: 300px;
     height: 5px;
-    background: #ddd;
+    background: #ccc;
     border: none;
     border-radius: 3px;
 }
@@ -148,7 +148,7 @@ input[type=range]::-moz-range-thumb {
     height: 16px;
     width: 16px;
     border-radius: 50%;
-    background: goldenrod;
+    background: #777;
 }
 
 /*hide the outline behind the border*/
@@ -176,7 +176,7 @@ input[type=range]::-ms-fill-lower {
     border-radius: 10px;
 }
 input[type=range]::-ms-fill-upper {
-    background: #ddd;
+    background: #ccc;
     border-radius: 10px;
 }
 input[type=range]::-ms-thumb {
@@ -269,6 +269,10 @@ input[type=range]:focus::-ms-fill-upper {
 	width:120px;
 	float:right;
 }
+#showRangeDiv {
+	width:300px;
+	float:left;
+}
 #minmaxDiv{
 	width:inherit;
 	font: georgia, helvetica, sans-serif;
@@ -277,10 +281,36 @@ input[type=range]:focus::-ms-fill-upper {
 #infoDiv {
 	width:390px;
 	float:right;
+	margin: 0px 25px 30px 60px;
+	height:150px;
+}
+#genbankDiv {
+	width:390px;
+	float:right;
 	margin: 0px 25px 0px 60px;
-	overflow-y: auto;
-	overflow-x: auto;
-	height:300px;
+	height:120px;
+}
+table.gentable {
+		display: table;
+		width: 100%;
+		font: 100% georgia, helvetica, sans-serif;
+}
+table.gentable thead, table.gentable tbody {
+		float: left;
+		width: 100%;
+		border: 1px solid black;
+}
+table.gentable tbody {
+		overflow: auto;
+		height: 125px;
+}
+table.gentable tr {
+		width: 100%;
+		display: table;
+}
+table.gentable td, table.gentable th {
+		text-align: center;
+		border: 1px black;
 }
 footer {
 	text-align: center;

@@ -22,6 +22,10 @@ def application(environ, start_response):
     spType = post.getvalue("spType")
     species = post.getvalue("species[]")
 
+    # If the species is a single one, then it is a string, convert it to a list
+    if isinstance(species, basestring):
+        species = [species]
+
     output = getGridVals.getMapBoxes(spType, species)
 
     status = '200 OK'
