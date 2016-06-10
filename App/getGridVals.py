@@ -1,4 +1,12 @@
 import json
+from scipy.stats import percentileofscore
+
+data_root = "/home/shyamsg/diversityMap/App/data/"
+
+def normalize(measures):
+    """This function changes a numpy array to a uniform normal array.
+    """
+    return([percentileofscore(measures, x) for x in measures])
 
 def getSpeciesBoxes(speciesType, chosenSpecie):
     """This function gets the lats and longs of the boxes where the species is
@@ -7,9 +15,9 @@ def getSpeciesBoxes(speciesType, chosenSpecie):
     to the IUCN database.
     """
     if (speciesType == "mammals"):
-        infile = "/home/shyam/Work/diversityMap/App/data/PAMatrix_mammals.txt"
+        infile = data_root+"Mammals_4deg_Behrmann.csv"
     elif (speciesType == "amphibians"):
-        infile = "/home/shyam/Work/diversityMap/App/data/PAMatrix_amphibs.txt"
+        infile = data_root+"Amphibians_4deg_Behrmann.csv"
     data = open(infile)
     speciesNames = data.readline().strip().split()
     if chosenSpecie in speciesNames:
@@ -24,6 +32,9 @@ def getSpeciesBoxes(speciesType, chosenSpecie):
             rangeLats.append(int(toks[0]))
             rangeLngs.append(int(toks[1]))
     data.close()
+#    if (len(rangeLats) == 0):
+#        rangeLats.append("Nan")
+#        rangeLngs.append("Nan")
     return (rangeLats, rangeLngs)
 
 def getGenbankSeqsIds(gidfile, chosenSpecies):
@@ -36,12 +47,16 @@ def getGenbankSeqsIds(gidfile, chosenSpecies):
     for line in gid:
         toks = line.strip().split()
         if toks[5] in chosenSpecies:
-            curhtml = "<tr><td width='60%'>"
+            curhtml = "<tr><td width='50%'>"
             curhtml += toks[5].replace("_", " ")
-            curhtml += "</td><td width='40%'><a href='http://www.ncbi.nlm.nih.gov/nuccore/"
+            curhtml += "</td><td width='25%'><a href='http://www.google.com/maps/place/"
+            curhtml += ",".join(toks[2:4])
+            curhtml += "' target='_blank'><span class='location'>"
+            curhtml += ", ".join([str(round(float(x),2)) for x in toks[2:4]])
+            curhtml += "</span></a></td><td width='25%'><a href='http://www.ncbi.nlm.nih.gov/nuccore/"
             curhtml += toks[4]
             curhtml += "' target='_blank'>"+toks[4]
-            curhtml += "</a></td></tr>"
+            curhtml += "</a></td><td width='5%'></td></tr>"
             if (int(toks[0]), int(toks[1])) in htmlLines:
                 htmlLines[(int(toks[0]), int(toks[1]))] += curhtml
             else:
@@ -49,20 +64,21 @@ def getGenbankSeqsIds(gidfile, chosenSpecies):
     gid.close()
     return htmlLines
 
-def getMapBoxes(speciesType, chosenSpecies, gdCol = 5, nseqCol = 3,
-                nsegCol = 4, nbpCol = 6):
+def getMapBoxes(speciesType, chosenSpecies, gdCol = 6, nseqCol = 3,
+                nsegCol = 4, nbpCol = 7):
     """This function gets the details on the map boxes
     and returns them to the web page, so that the map
     can be colored appropriately.
     """
     if (speciesType == "mammals"):
-        infile = "/home/shyam/Work/diversityMap/App/data/mammals_cytb_ss_noNaN_noSingleSeq.txt"
-        gidfile = "/home/shyam/Work/diversityMap/App/data/mammals_cytb_gids.txt"
+        infile = data_root+"mammals_cytb_noNaN_noSingleSeq_noZoo.txt"
+        gidfile = data_root+"mammals_cytb_gids.txt"
     elif (speciesType == "amphibians"):
-        infile = "/home/shyam/Work/diversityMap/App/data/amphs_cytb_ss_noNaN_noSingelSeq.txt"
-        gidfile = "/home/shyam/Work/diversityMap/App/data/amphs_cytb_gids.txt"
+        infile = data_root+"amphs_cytb_noNaN_noSingleSeq_noZoo.txt"
+        gidfile = data_root+"amphs_cytb_gids.txt"
     data = open(infile)
-#   line = data.readline()
+    # Read and discard header
+    line = data.readline()
     measureDict = {}
     numSeqsDict = {}
     numSpeciesDict = {}
@@ -105,11 +121,12 @@ def getMapBoxes(speciesType, chosenSpecies, gdCol = 5, nseqCol = 3,
     for elem in measureDict.keys():
         lats.append(elem[0])
         lngs.append(elem[1])
-        measures.append(round(measureDict[elem], 4))
+        measures.append(round(measureDict[elem]/len(numSpeciesDict[elem]), 4))
         nseqs.append(numSeqsDict[elem])
         nsegs.append(numSegSitesDict[elem])
         nbps.append(numBasePairDict[elem])
         nsps.append(len(numSpeciesDict[elem]))
         if elem in htmls:
             infoHtml.append(htmls[elem])
-    return(json.dumps([lats, lngs, measures, nseqs, infoHtml, nsps, nsegs, nbps, rangeLats, rangeLngs]))
+    quantmeasures = normalize(measures)
+    return(json.dumps([lats, lngs, measures, nseqs, infoHtml, nsps, nsegs, nbps, rangeLats, rangeLngs, quantmeasures]))

@@ -8,8 +8,54 @@ Code for grid on map.
 //   scale: 2
 // };
 
-var gridLats = [];
-for (lat=-86; lat < 90; lat=lat+4){
+var gridLatsPos = [-87.13095432,-71.19344778,-63.43259962,
+-57.36675111,-52.16760793,-47.51200969,
+-43.23364339,-39.23336546,-35.4462581,
+-31.82689536,-28.34184634,-24.96549118,
+-21.67751513,-18.4613206,-15.30297171,
+-12.19046255,-9.113189106,-7.63E-09,
+-6.061552269,-3.026646048,3.026646033,
+6.061552253,9.113189091,12.19046254,
+15.30297169,18.46132058,21.67751511,
+24.96549116,28.34184633,31.82689534,
+35.44625808,39.23336544,43.23364337,
+47.51200967,52.16760791,57.36675108,
+63.43259958,71.19344774,87.13095402];
+var gridLngsPos = [-179.9996845,-175.9996915,
+-171.9996986,-167.9997056,-163.9997127,
+-159.9997198,-155.9997268,-151.9997339,
+-147.9997409,-143.999748,-139.999755,
+-135.9997621,-131.9997692,-127.9997762,
+-123.9997833,-119.9997903,-115.9997974,
+-111.9998044,-107.9998115,-103.9998186,
+-99.99982562,-95.99983268,-91.99983974,
+-87.9998468,-83.99985385,-79.99986091,
+-75.99986797,-71.99987503,-67.99988209,
+-63.99988914,-59.9998962,-55.99990326,
+-51.99991032,-47.99991738,-43.99992443,
+-39.99993149,-35.99993855,-31.99994561,
+-27.99995267,-23.99995972,-19.99996678,
+-15.99997384,-11.9999809,-7.999987956,
+-3.999995014,-2.07E-06,3.99999087,
+7.999983812,11.99997675,15.9999697,
+19.99996264,23.99995558,27.99994852,
+31.99994146,35.99993441,39.99992735,
+43.99992029,47.99991323,51.99990617,
+55.99989912,59.99989206,63.999885,
+67.99987794,71.99987088,75.99986383,
+79.99985677,83.99984971,87.99984265,
+91.99983559,95.99982854,99.99982148,
+103.9998144,107.9998074,111.9998003,
+115.9997932,119.9997862,123.9997791,
+127.9997721,131.999765,135.999758,
+139.9997509,143.9997438,147.9997368,
+151.9997297,155.9997227,159.9997156,
+163.9997085,167.9997015,171.9996944,
+175.9996874,179.9996803];
+var gridLats=[];
+var numLats = gridLatsPos.length;
+for (var index=0; index < numLats; index++){
+  var lat = gridLatsPos[index];
   var temp = [];
   temp.push(new google.maps.LatLng(lat, -180));
   temp.push(new google.maps.LatLng(lat, 0));
@@ -22,7 +68,9 @@ for (lat=-86; lat < 90; lat=lat+4){
   }));
 }
 var gridLngs = [];
-for (lng=-180; lng < 180; lng=lng+4){
+var numLngs = gridLngsPos.length;
+for (var index=0; index < numLngs; index++){
+  var lng = gridLngsPos[index];
   var temp = [];
   temp.push(new google.maps.LatLng(-90, lng));
   temp.push(new google.maps.LatLng(0, lng));
@@ -34,7 +82,6 @@ for (lng=-180; lng < 180; lng=lng+4){
     strokeWeight: 0.5
   }));
 }
-
 function drawGrid() {
   // This function draws a grid on map at box edges using
   // white transparent color.
@@ -79,19 +126,32 @@ function colorCode(fadeProp, r0, r1, g0, g1, b0, b1) {
                   Math.floor(b0 + (b1-b0)*fadeProp) +")");
 }
 
+var paperColors = ["#004C73","#0084A8","#89CD66","#D1FF73","#FFFF73","#FFAA00","#FF5500","#A80000"];
+var paperColorScheme = false;
 function updateColorbar() {
-  nbins = 100;
-  var increment = 1.0/nbins;
-  var sc = hexToRgb('#'+$('#startColor').val());
-  var ec = hexToRgb('#'+$('#endColor').val());
-  $('#colorbar').html('');
-  var gradient = $("<div>").css({display:"flex", "flex-direction":"row",height:"100%"});
-  for (var i = 0; i <= 1.0; i += increment){
-        gradient.append($("<div>").css({float:"left",
-        "background-color":colorCode(i,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b),flex:1}));
-  }
-  $("#colorbar").append(gradient);
-  $("#colorbar").css("width","300px").css("height","30px");
+    nbins = 104;
+    if (paperColorScheme) {
+        $('#colorbar').html('');
+        var gradient = $("<div>").css({display:"flex", "flex-direction":"row",height:"100%"});
+        for (var i = 0; i < 8; i ++) {
+            for (var j = 0; j < 13; j++) {
+                gradient.append($("<div>").css({float:"left",
+                "background-color":paperColors[i],flex:1}));
+            }
+        }
+    } else {
+        var increment = 1.0/nbins;
+        var sc = hexToRgb('#'+$('#startColor').val());
+        var ec = hexToRgb('#'+$('#endColor').val());
+        $('#colorbar').html('');
+        var gradient = $("<div>").css({display:"flex", "flex-direction":"row",height:"100%"});
+        for (var i = 0; i <= 1.0; i += increment){
+            gradient.append($("<div>").css({float:"left",
+            "background-color":colorCode(i,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b),flex:1}));
+        }
+    }
+    $("#colorbar").append(gradient);
+    $("#colorbar").css("width","300px").css("height","30px");
 }
 
 function grayscale() {
@@ -99,6 +159,7 @@ function grayscale() {
   $('#startColor').css('background-color', '#FFFFFF');
   $('#endColor').val("000000");
   $('#endColor').css('background-color', '#000000');
+  paperColorScheme = false;
   updateColorbar();
   updateShapeColors();
 }
@@ -107,30 +168,25 @@ function heatmap() {
   $('#startColor').css('background-color', '#FFFF00');
   $('#endColor').val("FF0000");
   $('#endColor').css('background-color', '#FF0000');
+  paperColorScheme = false;
   updateColorbar();
   updateShapeColors();
 }
-function blues() {
-  $('#startColor').val("FFFFFF");
-  $('#startColor').css('background-color', '#FFFFFF');
-  $('#endColor').val("0000FF");
-  $('#endColor').css('background-color', '#0000FF');
-  updateColorbar();
-  updateShapeColors();
-}
-function reds() {
-  $('#startColor').val("FFFFFF");
-  $('#startColor').css('background-color', '#FFFFFF');
-  $('#endColor').val("FF0000");
-  $('#endColor').css('background-color', '#FF0000');
-  updateColorbar();
-  updateShapeColors();
-}
-function greens() {
-  $('#startColor').val("FFFFFF");
-  $('#startColor').css('background-color', '#FFFFFF');
+function redgreen() {
+  $('#startColor').val("FF0000");
+  $('#startColor').css('background-color', '#FF0000');
   $('#endColor').val("00FF00");
   $('#endColor').css('background-color', '#00FF00');
+  paperColorScheme = false;
+  updateColorbar();
+  updateShapeColors();
+}
+function divergent() {
+  $('#startColor').val("004C73");
+  $('#startColor').css('background-color', '#004C73');
+  $('#endColor').val("A80000");
+  $('#endColor').css('background-color', '#A80000');
+  paperColorScheme = true;
   updateColorbar();
   updateShapeColors();
 }
@@ -139,6 +195,7 @@ Code for plotting the rectangles
 */
 var shapesPlotted = [];
 var diversityMeasures = [];
+var divMeasures_quant = [];
 var nseqs = [];
 var nsps = [];
 var nbps = [];
@@ -169,8 +226,9 @@ function updateInfoDiv(lat, lng, nsp, nseq, infoString, diversity, nseg, nbp) {
   htmlstr += "<b>Diversity: "+diversity+"</b>";
   $('#infoDiv').html(htmlstr);
   htmlstr = "<h4><a href='http://www.ncbi.nlm.nih.gov/genbank/' target='_blank'>GenBank</a> information</h4>";
-  htmlstr += "<table class='gentable'><thead><tr><th width='57%'>Species</th>"
-  htmlstr += "<th width='43%'>Accession</span></th></tr></thead>"
+  htmlstr += "<table class='gentable'><thead><tr><th width='50%'>Species</th>"
+  htmlstr += "<th width='25%'>Location</th>"
+  htmlstr += "<th width='25%'>ID</th></tr></thead>"
   htmlstr += "<tbody>"
   htmlstr += infoString;
   htmlstr += "</tbody></table>"
@@ -189,19 +247,42 @@ function showRectangles(lats, lngs) {
   var ec = hexToRgb('#'+$('#endColor').val());
   var opac = $('#opacity').val()/100;
   var colors = [];
-  var maxMeasure = Math.max.apply(Math, diversityMeasures);
-  var minMeasure = Math.min.apply(Math, diversityMeasures);
+  var plotMeasures = diversityMeasures;
+  var maxMeasure = Math.max.apply(Math, plotMeasures);
+  var minMeasure = Math.min.apply(Math, plotMeasures);
+  if ($('#quantNorm').is(':checked')) {
+    plotMeasures = divMeasures_quant;
+    minMeasure = 0;
+    maxMeasure = 100;
+  }
   $('#minmeasure').html(minMeasure);
   $('#maxmeasure').html(maxMeasure);
-  if (maxMeasure == minMeasure) {
-    var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
-    for (i=0; i < lats.length; i++) {
-      colors.push(tempColor);
+  if (paperColorScheme) {
+    if (maxMeasure == minMeasure) {
+      var tempColor = paperColors[4];
+      for (i=0; i < lats.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < lats.length; i++) {
+        var tempColor = Math.floor(8*(plotMeasures[i] - minMeasure)/maxMeasure);
+        if (tempColor > 7) {
+          tempColor = 7;
+        }
+        colors.push(paperColors[tempColor]);
+      }
     }
   } else {
-    for (i=0; i < lats.length; i++) {
-      colors.push(colorCode((diversityMeasures[i] - minMeasure)/maxMeasure,
-                            sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+    if (maxMeasure == minMeasure) {
+      var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
+      for (i=0; i < lats.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < lats.length; i++) {
+        colors.push(colorCode((plotMeasures[i] - minMeasure)/maxMeasure,
+                              sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+      }
     }
   }
   for (i=0; i < lats.length; i++) {
@@ -213,7 +294,9 @@ function showRectangles(lats, lngs) {
       ),
       fillColor: colors[i],
       fillOpacity: opac,
-      strokeWeight: 0,
+      strokeWeight: 1,
+      strokeColor: "#FFFFFF",
+      strokeOpacity: opac,
       clickable: true
     });
     attachListenerWithSeqMsg(curRect, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
@@ -233,19 +316,42 @@ function showCircles(lats, lngs) {
   var ec = hexToRgb('#'+$('#endColor').val());
   var opac = $('#opacity').val()/100;
   var colors = [];
-  var maxMeasure = Math.max.apply(Math, diversityMeasures);
-  var minMeasure = Math.min.apply(Math, diversityMeasures);
+  var plotMeasures = diversityMeasures;
+  var maxMeasure = Math.max.apply(Math, plotMeasures);
+  var minMeasure = Math.min.apply(Math, plotMeasures);
+  if ($('#quantNorm').is(':checked')) {
+    plotMeasures = divMeasures_quant;
+    minMeasure = 0;
+    maxMeasure = 100;
+  }
   $('#minmeasure').html(minMeasure);
   $('#maxmeasure').html(maxMeasure);
-  if (maxMeasure == minMeasure) {
-    var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
-    for (i=0; i < lats.length; i++) {
-      colors.push(tempColor);
+  if (paperColorScheme) {
+    if (maxMeasure == minMeasure) {
+      var tempColor = paperColors[4];
+      for (i=0; i < lats.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < lats.length; i++) {
+        var tempColor = Math.floor(8*(plotMeasures[i] - minMeasure)/maxMeasure);
+        if (tempColor > 7) {
+          tempColor = 7;
+        }
+        colors.push(paperColors[tempColor]);
+      }
     }
   } else {
-    for (i=0; i < lats.length; i++) {
-      colors.push(colorCode((diversityMeasures[i] - minMeasure)/maxMeasure,
-                            sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+    if (maxMeasure == minMeasure) {
+      var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
+      for (i=0; i < lats.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < lats.length; i++) {
+        colors.push(colorCode((plotMeasures[i] - minMeasure)/maxMeasure,
+                              sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+      }
     }
   }
   var mxNseqs = Math.max.apply(Math, nseqs);
@@ -261,7 +367,9 @@ function showCircles(lats, lngs) {
       radius: curSeqs[i]*2*Math.cos(getRadUpperLat(lats[i]))*111321,
       fillColor: colors[i],
       fillOpacity: opac,
-      strokeWeight: 0,
+      strokeWeight: 1,
+      strokeColor: '#FFFFFF',
+      strokeOpacity: opac,
       clickable: true
     });
     attachListenerWithSeqMsg(curCirc, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
@@ -305,7 +413,6 @@ function drawRange() {
   if (rangeLats.length == 0 || rangeLngs.length == 0 || rangeLats.length != rangeLngs.length) {
     return 0;
   }
-
   for (i=0; i < rangeLats.length; i++) {
       var curRangePath = [
         {lat:rangeLats[i]-2, lng:rangeLngs[i]-2},
@@ -327,7 +434,7 @@ function drawRange() {
 
 function colorMap(spType, species) {
   $.ajax({
-    url: "/temp",
+    url: "/remap",
     type: "post",
     datatype:"json",
     data: {"spType": spType, "species": species},
@@ -337,6 +444,7 @@ function colorMap(spType, species) {
     }
   });
 }
+
 function updateMap(response) {
     var obj = $.parseJSON(response);
     diversityMeasures = obj[2];
@@ -347,6 +455,7 @@ function updateMap(response) {
     nbps = obj[7];
     rangeLats = obj[8];
     rangeLngs = obj[9];
+    divMeasures_quant = obj[10];
     if ($('#rectSymbol').is(":checked")) {
       showRectangles(obj[0], obj[1]);
     } else {
@@ -360,7 +469,7 @@ function updateMap(response) {
 function updateShapeOpacity() {
   var opac = $('#opacity').val()/100.0;
   for (i=0; i < shapesPlotted.length; i++) {
-    shapesPlotted[i].setOptions({ fillOpacity: opac });
+    shapesPlotted[i].setOptions({ fillOpacity: opac, strokeOpacity: opac });
   }
 }
 
@@ -368,17 +477,42 @@ function updateShapeColors() {
   var sc = hexToRgb('#'+$('#startColor').val());
   var ec = hexToRgb('#'+$('#endColor').val());
   var colors = [];
-  var maxMeasure = Math.max.apply(Math, diversityMeasures);
-  var minMeasure = Math.min.apply(Math, diversityMeasures);
-  if (maxMeasure == minMeasure) {
-    var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
-    for (i=0; i < diversityMeasures.length; i++) {
-      colors.push(tempColor);
+  var plotMeasures = diversityMeasures;
+  var maxMeasure = Math.max.apply(Math, plotMeasures);
+  var minMeasure = Math.min.apply(Math, plotMeasures);
+  if ($('#quantNorm').is(':checked')) {
+    plotMeasures = divMeasures_quant;
+    minMeasure = 0;
+    maxMeasure = 100;
+  }
+  $('#minmeasure').html(minMeasure);
+  $('#maxmeasure').html(maxMeasure);
+  if (paperColorScheme) {
+    if (maxMeasure == minMeasure) {
+      var tempColor = paperColors[4];
+      for (i=0; i < diversityMeasures.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < diversityMeasures.length; i++) {
+        var tempColor = Math.floor(8*(plotMeasures[i] - minMeasure)/maxMeasure);
+        if (tempColor > 7) {
+            tempColor = 7;
+        }
+        colors.push(paperColors[tempColor]);
+      }
     }
   } else {
-    for (i=0; i < diversityMeasures.length; i++) {
-      colors.push(colorCode((diversityMeasures[i] - minMeasure)/maxMeasure,
-                            sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+    if (maxMeasure == minMeasure) {
+      var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
+      for (i=0; i < diversityMeasures.length; i++) {
+        colors.push(tempColor);
+      }
+    } else {
+      for (i=0; i < diversityMeasures.length; i++) {
+        colors.push(colorCode((plotMeasures[i] - minMeasure)/maxMeasure,
+                              sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
+      }
     }
   }
   for (i=0; i < shapesPlotted.length; i++) {
@@ -439,6 +573,9 @@ $(document).ready(function() {
       clearGrid();
     }
   });
+  $('#quantNorm').change(function(){
+    updateShapeColors();
+  });
   $('#showRange').change(function(){
     if ($(this).is(":checked")) {
       drawRange();
@@ -447,10 +584,12 @@ $(document).ready(function() {
     }
   });
   $('#startColor').change(function(){
+    paperColorScheme = false;
     updateColorbar();
     updateShapeColors();
   });
   $('#endColor').change(function(){
+    paperColorScheme = false;
     updateColorbar();
     updateShapeColors();
   });
@@ -462,9 +601,11 @@ $(document).ready(function() {
     if (spType == 'mammals') {
       $('#amphibians').hide();
       $('#mammals').show();
+      $('#mammalNames').change();
     } else {
       $('#mammals').hide();
       $('#amphibians').show();
+      $('#amphibianNames').change();
     }
   });
   $('input[name=symbol]').on('change', function() {
