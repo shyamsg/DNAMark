@@ -11,17 +11,14 @@
 	<script src="/code/js/updateMap.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#mammals').load("/html/mammalsList.html");
-			$('#mammals').show();
+			$('#mammals_cytb').load("/html/mammalsList_cytb.html");
+			$('#mammals_cytb').show();
+			$('#mammals_coi').load("/html/mammalsList_coi.html");
+			$('#mammals_coi').hide();
 			$('#amphibians').load("/html/amphibiansList.html");
 			$('#amphibians').hide();
 			updateColorbar();
-		    $('.spList').change(function(){
-                var dummy=$(this).val();
-                alert(dummy.length);
-            });
-		});
-        alert("This page is under construction. We are moving from an equal 4x4 grid of longitudes and latitudes to an equal area grid for the analysis. During this time, some functionality is going to be BROKEN. We are working hard to fix it and will have the full web functionality up and running within a week or so. Please bear with us.")
+        });
 	</script>
 	<noscript>Your browser does not support Javascript!</noscript>
 </head>
@@ -29,6 +26,7 @@
 	<div id="fullbody" align="center">
 		<div id="header">
 			<h2 style="text-align:center"><b>iMapGenes: Diversity Explorer</b></h2>
+			<p style="text-align:right; font-style:oblique; font-size:30px">Beta version</p>
 		</div>
 		<div id="main">
     		<div id="control">
@@ -41,8 +39,16 @@
     					<input type="radio" name="speciesType" value="amphibians"/>
     					<span><b>Amphibians</b> </span>
     				</div>
-    				<div id="mammals" class="spListDiv"></div>
+    				<div id="mammals_cytb" class="spListDiv"></div>
+    				<div id="mammals_coi" class="spListDiv"></div>
     				<div id="amphibians" class="spListDiv"></div>
+    				<h4>Gene </h4>
+    				<div id="geneRadio">
+    					<input type="radio" id="cytb" name="gene" value="cytb" checked/>
+    					<span><b>Cytb</b> </span>
+    					<input type="radio" id="coi" name="gene" value="coi"/>
+    					<span id="coiText"><b>Co1</b> </span>
+    				</div>
     			</div>
     			<div id="plotControl">
     				<h3>Plotting controls</h3>

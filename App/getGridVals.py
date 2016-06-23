@@ -24,58 +24,62 @@ def getSpeciesBoxes(speciesType, chosenSpecie):
         chosenSpecieIndex = speciesNames.index(chosenSpecie)
     else:
         return ([],[])
-    rangeLats = []
-    rangeLngs = []
+    rangeGridIds = []
     for line in data:
         toks = line.strip().split()
         if toks[chosenSpecieIndex] == "1":
-            rangeLats.append(int(toks[0]))
-            rangeLngs.append(int(toks[1]))
+            rangeGridIds.append(toks[0])
     data.close()
-#    if (len(rangeLats) == 0):
-#        rangeLats.append("Nan")
-#        rangeLngs.append("Nan")
-    return (rangeLats, rangeLngs)
+    return rangeGridIds
 
-def getGenbankSeqsIds(gidfile, chosenSpecies):
+def getGenbankSeqsIds(dldir, chosenSpecies):
     """This function returns the information on the genbank ids for the chosen
     species. It returns a dictionary with the lat, lng as key and an array of
     genbank accession numbers as value.
     """
-    gid = open(gidfile)
     htmlLines = {}
-    for line in gid:
-        toks = line.strip().split()
-        if toks[5] in chosenSpecies:
+    for specie in chosenSpecies:
+        coordfile = open(dldir+specie+".coords")
+        for line in coordfile:
+            toks = line.strip().split()
             curhtml = "<tr><td width='50%'>"
-            curhtml += toks[5].replace("_", " ")
+            curhtml += specie.replace("_", " ")
             curhtml += "</td><td width='25%'><a href='http://www.google.com/maps/place/"
-            curhtml += ",".join(toks[2:4])
+            curhtml += ",".join(toks[0:2])
             curhtml += "' target='_blank'><span class='location'>"
-            curhtml += ", ".join([str(round(float(x),2)) for x in toks[2:4]])
-            curhtml += "</span></a></td><td width='25%'><a href='http://www.ncbi.nlm.nih.gov/nuccore/"
-            curhtml += toks[4]
-            curhtml += "' target='_blank'>"+toks[4]
-            curhtml += "</a></td><td width='5%'></td></tr>"
-            if (int(toks[0]), int(toks[1])) in htmlLines:
-                htmlLines[(int(toks[0]), int(toks[1]))] += curhtml
+            curhtml += ", ".join([str(round(float(x),2)) for x in toks[0:2]])
+            curhtml += "</span></a></td><td width='25%'>"
+            if len(toks) == 8: ## genbank accession available
+                curhtml += "<a href='http://www.ncbi.nlm.nih.gov/nuccore/"+toks[7]+"' target='_blank'>"+toks[7]+"</a>"
+            elif len(toks) == 7: ## use the bold id
+                curhtml += "<a href='http://www.boldsystems.org/index.php/Public_RecordView?processid="+toks[6]+"' target='_blank'>"+toks[6]+"</a>"
             else:
-                htmlLines[(int(toks[0]), int(toks[1]))] = curhtml
-    gid.close()
+                curhtml += "NA"
+            curhtml += "</td><td width='5%'></td></tr>"
+            gridid = str(int(toks[5])+1)
+            if gridid in htmlLines:
+                htmlLines[gridid] += curhtml
+            else:
+                htmlLines[gridid] = curhtml
+        coordfile.close()
     return htmlLines
 
-def getMapBoxes(speciesType, chosenSpecies, gdCol = 6, nseqCol = 3,
-                nsegCol = 4, nbpCol = 7):
+def getMapBoxes(speciesType, chosenSpecies, gene, gdCol = 4, nseqCol = 2,
+                nsegCol = 3, nbpCol = 5):
     """This function gets the details on the map boxes
     and returns them to the web page, so that the map
     can be colored appropriately.
     """
     if (speciesType == "mammals"):
-        infile = data_root+"mammals_cytb_noNaN_noSingleSeq_noZoo.txt"
-        gidfile = data_root+"mammals_cytb_gids.txt"
+        if (gene == "cytb"):
+            infile = data_root+"mammals_cytb_ss_400_noNaN_noSingleSeq.txt"
+            dldir = data_root+"cytb_equaldis_mammals/"
+        elif (gene == "coi"):
+            infile = data_root+"mammals_coi_ss_400_noNaN_noSingleSeq.txt"
+            dldir = data_root+"coi_equaldis_mammals/"
     elif (speciesType == "amphibians"):
-        infile = data_root+"amphs_cytb_noNaN_noSingleSeq_noZoo.txt"
-        gidfile = data_root+"amphs_cytb_gids.txt"
+        infile = data_root+"amphs_cytb_ss_400_noNaN_noSingleSeq.txt"
+        dldir = data_root+"cytb_equaldis_amphs/"
     data = open(infile)
     # Read and discard header
     line = data.readline()
@@ -87,46 +91,41 @@ def getMapBoxes(speciesType, chosenSpecies, gdCol = 6, nseqCol = 3,
     for line in data:
         toks = line.strip().split()
         if (toks[0] in chosenSpecies):
-            lat = int(toks[1])
-            lng = int(toks[2])
-            if ((lat, lng) in measureDict):
-                measureDict[(lat,lng)] += float(toks[gdCol])
-                numSeqsDict[(lat,lng)] += int(toks[nseqCol])
-                numSegSitesDict[(lat,lng)] += int(toks[nsegCol])
-                numBasePairDict[(lat,lng)] += int(toks[nbpCol])
-                if (toks[0] not in numSpeciesDict[(lat,lng)]):
-                    numSpeciesDict[(lat,lng)].append(toks[0])
+            gridId = toks[1]
+            if (gridId in measureDict):
+                measureDict[gridId] += float(toks[gdCol])
+                numSeqsDict[gridId] += int(toks[nseqCol])
+                numSegSitesDict[gridId] += int(toks[nsegCol])
+                numBasePairDict[gridId] += int(toks[nbpCol])
+                if (toks[0] not in numSpeciesDict[gridId]):
+                    numSpeciesDict[gridId].append(toks[0])
             else:
-                measureDict[(lat,lng)] = float(toks[gdCol])
-                numSeqsDict[(lat,lng)] = int(toks[nseqCol])
-                numSegSitesDict[(lat,lng)] = int(toks[nsegCol])
-                numBasePairDict[(lat,lng)] = int(toks[nbpCol])
-                numSpeciesDict[(lat,lng)] = [toks[0]]
-
-    rangeLats = []
-    rangeLngs = [chosenSpecies]
+                measureDict[gridId] = float(toks[gdCol])
+                numSeqsDict[gridId] = int(toks[nseqCol])
+                numSegSitesDict[gridId] = int(toks[nsegCol])
+                numBasePairDict[gridId] = int(toks[nbpCol])
+                numSpeciesDict[gridId] = [toks[0]]
+    rangeGridIds = []
     if len(chosenSpecies) == 1:
-        rangeLats, rangeLngs = getSpeciesBoxes(speciesType, chosenSpecies[0])
+        rangeGridIds = getSpeciesBoxes(speciesType, chosenSpecies[0])
 
-    htmls = getGenbankSeqsIds(gidfile, chosenSpecies)
+    htmls = getGenbankSeqsIds(dldir, chosenSpecies)
 
-    lats = []
-    lngs = []
+    gridIds = []
     measures = []
     nsps = []
     nseqs = []
     nsegs = []
     nbps = []
     infoHtml = []
-    for elem in measureDict.keys():
-        lats.append(elem[0])
-        lngs.append(elem[1])
-        measures.append(round(measureDict[elem]/len(numSpeciesDict[elem]), 4))
-        nseqs.append(numSeqsDict[elem])
-        nsegs.append(numSegSitesDict[elem])
-        nbps.append(numBasePairDict[elem])
-        nsps.append(len(numSpeciesDict[elem]))
-        if elem in htmls:
-            infoHtml.append(htmls[elem])
+    for gridId in measureDict.keys():
+        gridIds.append(gridId)
+        measures.append(round(measureDict[gridId]/len(numSpeciesDict[gridId]), 4))
+        nseqs.append(numSeqsDict[gridId])
+        nsegs.append(numSegSitesDict[gridId])
+        nbps.append(numBasePairDict[gridId])
+        nsps.append(len(numSpeciesDict[gridId]))
+        if gridId in htmls:
+            infoHtml.append(htmls[gridId])
     quantmeasures = normalize(measures)
-    return(json.dumps([lats, lngs, measures, nseqs, infoHtml, nsps, nsegs, nbps, rangeLats, rangeLngs, quantmeasures]))
+    return(json.dumps([gridIds, measures, nseqs, infoHtml, nsps, nsegs, nbps, rangeGridIds, quantmeasures]))

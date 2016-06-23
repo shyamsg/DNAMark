@@ -13,8 +13,8 @@ var gridLatsPos = [-87.13095432,-71.19344778,-63.43259962,
 -43.23364339,-39.23336546,-35.4462581,
 -31.82689536,-28.34184634,-24.96549118,
 -21.67751513,-18.4613206,-15.30297171,
--12.19046255,-9.113189106,-7.63E-09,
--6.061552269,-3.026646048,3.026646033,
+-12.19046255,-9.113189106,-6.061552269,
+-3.026646048,-7.63E-09,3.026646033,
 6.061552253,9.113189091,12.19046254,
 15.30297169,18.46132058,21.67751511,
 24.96549116,28.34184633,31.82689534,
@@ -193,6 +193,7 @@ function divergent() {
 /*
 Code for plotting the rectangles
 */
+var shapeGridIds = [];
 var shapesPlotted = [];
 var diversityMeasures = [];
 var divMeasures_quant = [];
@@ -202,23 +203,25 @@ var nbps = [];
 var nsegs = [];
 var infoHtmls = [];
 
-function getRadUpperLat(latitude) {
-  latitude += ((latitude < 0) ? -2 : 2);
-  latitude = latitude*Math.PI/180.0;
-  return(latitude);
-}
-
-function attachListenerWithSeqMsg(rect, lat, lng, nsps, nseq, msg, diversity, nseg, nbp) {
+function attachListenerWithSeqMsg(rect, gridId, nsps, nseq, msg, diversity, nseg, nbp) {
   rect.addListener('click', function(msevent) {
-    updateInfoDiv(lat, lng, nsps, nseq, msg, diversity, nseg, nbp);
+    updateInfoDiv(gridId, nsps, nseq, msg, diversity, nseg, nbp);
   });
 }
 
-function updateInfoDiv(lat, lng, nsp, nseq, infoString, diversity, nseg, nbp) {
+function updateInfoDiv(gridId, nsp, nseq, infoString, diversity, nseg, nbp) {
   htmlstr = "<h3>Information on chosen location</h3>";
-  htmlstr += "<h4>Sampling grid location</h4>"
-  htmlstr += "<b>Latitude:  </b>"+lat+"&nbsp;&nbsp;&nbsp;";
-  htmlstr += "<b>Longitude: </b>"+lng+"<br/>";
+  htmlstr += "<h4>Sampling grid location</h4>";
+  var latIndex = Math.floor(gridId/90);
+  var lngIndex = gridId%90 - 1;
+  var latLetter1 = (gridLatsPos[latIndex] > 0) ? "N": "S";
+  var latLetter2 = (gridLatsPos[latIndex+1] > 0) ? "N": "S";
+  var lngLetter1 = (gridLngsPos[lngIndex] > 0) ? "E": "W";
+  var lngLetter2 = (gridLngsPos[lngIndex+1] > 0) ? "E": "W";
+  htmlstr += "<b>Latitude: </b>"+Math.abs(Math.round(gridLatsPos[latIndex]*100)/100)+"&nbsp;"+latLetter1;
+  htmlstr += "&nbsp;&ndash;&nbsp;"+Math.abs(Math.round(gridLatsPos[latIndex+1]*100)/100)+"&nbsp;"+latLetter2+"<br/>";
+  htmlstr += "<b>Longitude: </b>"+Math.abs(Math.round(gridLngsPos[lngIndex]*100)/100)+"&nbsp;"+lngLetter1;
+  htmlstr += "&nbsp;&ndash;&nbsp;"+Math.abs(Math.round(gridLngsPos[lngIndex+1]*100)/100)+"&nbsp;"+lngLetter2+"<br/>";
   htmlstr += "<b># species: "+nsp+"</b>&nbsp;&nbsp;&nbsp;";
   htmlstr += "<b># sequences: "+nseq+"</b></br>";
   htmlstr += "<b># segregating sites: "+nseg+"</b>&nbsp;&nbsp;&nbsp;";
@@ -232,10 +235,11 @@ function updateInfoDiv(lat, lng, nsp, nseq, infoString, diversity, nseg, nbp) {
   htmlstr += "<tbody>"
   htmlstr += infoString;
   htmlstr += "</tbody></table>"
+//  htmlstr += "<a href=" " target='_blank'></a>"
   $('#genbankDiv').html(htmlstr);
 }
 
-function showRectangles(lats, lngs) {
+function showRectangles() {
   if (diversityMeasures.length == 0) {
     return;
   }
@@ -260,11 +264,11 @@ function showRectangles(lats, lngs) {
   if (paperColorScheme) {
     if (maxMeasure == minMeasure) {
       var tempColor = paperColors[4];
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(tempColor);
       }
     } else {
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         var tempColor = Math.floor(8*(plotMeasures[i] - minMeasure)/maxMeasure);
         if (tempColor > 7) {
           tempColor = 7;
@@ -275,22 +279,24 @@ function showRectangles(lats, lngs) {
   } else {
     if (maxMeasure == minMeasure) {
       var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(tempColor);
       }
     } else {
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(colorCode((plotMeasures[i] - minMeasure)/maxMeasure,
                               sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
       }
     }
   }
-  for (i=0; i < lats.length; i++) {
+  for (i=0; i < shapeGridIds.length; i++) {
+    var latIndex = Math.floor(shapeGridIds[i]/90.0);
+    var lngIndex = (shapeGridIds[i]%90) - 1;
     var curRect = new google.maps.Rectangle( {
       map: map,
       bounds: new google.maps.LatLngBounds(
-        new google.maps.LatLng(lats[i]-2, lngs[i]-2),
-        new google.maps.LatLng(lats[i]+2, lngs[i]+2)
+        new google.maps.LatLng(gridLatsPos[latIndex], gridLngsPos[lngIndex]),
+        new google.maps.LatLng(gridLatsPos[latIndex+1], gridLngsPos[lngIndex+1])
       ),
       fillColor: colors[i],
       fillOpacity: opac,
@@ -299,12 +305,12 @@ function showRectangles(lats, lngs) {
       strokeOpacity: opac,
       clickable: true
     });
-    attachListenerWithSeqMsg(curRect, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
+    attachListenerWithSeqMsg(curRect, shapeGridIds[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curRect);
   }
 }
 
-function showCircles(lats, lngs) {
+function showCircles() {
   if (diversityMeasures.length == 0) {
     return;
   }
@@ -329,11 +335,11 @@ function showCircles(lats, lngs) {
   if (paperColorScheme) {
     if (maxMeasure == minMeasure) {
       var tempColor = paperColors[4];
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(tempColor);
       }
     } else {
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         var tempColor = Math.floor(8*(plotMeasures[i] - minMeasure)/maxMeasure);
         if (tempColor > 7) {
           tempColor = 7;
@@ -344,11 +350,11 @@ function showCircles(lats, lngs) {
   } else {
     if (maxMeasure == minMeasure) {
       var tempColor = colorCode(0.5,sc.r,ec.r,sc.g,ec.g,sc.b,ec.b);
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(tempColor);
       }
     } else {
-      for (i=0; i < lats.length; i++) {
+      for (i=0; i < shapeGridIds.length; i++) {
         colors.push(colorCode((plotMeasures[i] - minMeasure)/maxMeasure,
                               sc.r,ec.r,sc.g,ec.g,sc.b,ec.b));
       }
@@ -359,12 +365,17 @@ function showCircles(lats, lngs) {
   for (i=0; i < nseqs.length; i++) {
     curSeqs.push(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1));
   }
-  for (i=0; i < lats.length; i++) {
+  for (i=0; i < shapeGridIds.length; i++) {
+    var latIndex = Math.floor(shapeGridIds[i]/90);
+    var lngIndex = (shapeGridIds[i]%90) - 1;
+    var midlat = (gridLatsPos[latIndex] + gridLatsPos[latIndex+1])/2;
+    var midlng = (gridLngsPos[lngIndex] + gridLngsPos[lngIndex+1])/2;
     var curCirc = new google.maps.Circle( {
       map: map,
-      center: new google.maps.LatLng(lats[i], lngs[i]),
-      // Length of 1 degree of long at equator is 111321 m
-      radius: curSeqs[i]*2*Math.cos(getRadUpperLat(lats[i]))*111321,
+      center: new google.maps.LatLng(midlat, midlng),
+      // Length of 1 degree of longitude at equator is 111321 m
+      radius: curSeqs[i]*2*Math.cos(Math.max(Math.abs(gridLatsPos[latIndex]),Math.abs(gridLatsPos[latIndex+1]))
+                                    *Math.PI/180)*111321,
       fillColor: colors[i],
       fillOpacity: opac,
       strokeWeight: 1,
@@ -372,7 +383,7 @@ function showCircles(lats, lngs) {
       strokeOpacity: opac,
       clickable: true
     });
-    attachListenerWithSeqMsg(curCirc, lats[i], lngs[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
+    attachListenerWithSeqMsg(curCirc, shapeGridIds[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curCirc);
   }
 }
@@ -381,46 +392,38 @@ function switchShapes() {
   var lats = [];
   var lngs = [];
   if ($('#rectSymbol').is(":checked")) {
-    for (i=0; i < shapesPlotted.length; i++){
-      lats.push(shapesPlotted[i].getCenter().lat());
-      lngs.push(shapesPlotted[i].getCenter().lng());
-    }
-    showRectangles(lats, lngs);
+    showRectangles();
   } else {
-    for (i=0; i < shapesPlotted.length; i++){
-      lats.push(shapesPlotted[i].getBounds().getCenter().lat());
-      lngs.push(shapesPlotted[i].getBounds().getCenter().lng());
-    }
-    showCircles(lats, lngs);
+    showCircles();
   }
 }
 
 /*
 Vars for plotting range
 */
-var rangeLats = [];
-var rangeLngs = [];
+var rangeGridIds = [];
 var rangeBoxesPlotted = [];
 
 function clearRange() {
   for (i=0; i < rangeBoxesPlotted.length; i++) {
     rangeBoxesPlotted[i].setMap(null);
   }
+  rangeBoxesPlotted.length = 0;
 }
 
 function drawRange() {
   clearRange();
-  if (rangeLats.length == 0 || rangeLngs.length == 0 || rangeLats.length != rangeLngs.length) {
+  if (rangeGridIds.length == 0) {
     return 0;
   }
-  for (i=0; i < rangeLats.length; i++) {
-      var curRangePath = [
-        {lat:rangeLats[i]-2, lng:rangeLngs[i]-2},
-        {lat:rangeLats[i]-2, lng:rangeLngs[i]+2},
-        {lat:rangeLats[i]+2, lng:rangeLngs[i]+2},
-        {lat:rangeLats[i]+2, lng:rangeLngs[i]-2},
-        {lat:rangeLats[i]-2, lng:rangeLngs[i]-2}
-      ];
+  for (i=0; i < rangeGridIds.length; i++) {
+      var latIndex = Math.floor(rangeGridIds[i]/90.0);
+      var lngIndex = (rangeGridIds[i]%90) - 1;
+      var bl = {lat:gridLatsPos[latIndex], lng:gridLngsPos[lngIndex]};
+      var br = {lat:gridLatsPos[latIndex], lng:gridLngsPos[lngIndex+1]};
+      var tr = {lat:gridLatsPos[latIndex+1], lng:gridLngsPos[lngIndex+1]};
+      var tl = {lat:gridLatsPos[latIndex+1], lng:gridLngsPos[lngIndex]};
+      var curRangePath = [ bl, br, tr, tl, bl ];
       rangeBox = new google.maps.Polyline({
         path: curRangePath,
         strokeColor: '#555555',
@@ -432,12 +435,12 @@ function drawRange() {
   }
 }
 
-function colorMap(spType, species) {
+function colorMap(spType, species, gene) {
   $.ajax({
     url: "/remap",
     type: "post",
     datatype:"json",
-    data: {"spType": spType, "species": species},
+    data: {"spType": spType, "species": species, "gene":gene},
     success: function(response){
       // Execute our callback function
       updateMap(response);
@@ -447,19 +450,19 @@ function colorMap(spType, species) {
 
 function updateMap(response) {
     var obj = $.parseJSON(response);
-    diversityMeasures = obj[2];
-    nseqs = obj[3];
-    infoHtmls = obj[4];
-    nsps = obj[5];
-    nsegs = obj[6];
-    nbps = obj[7];
-    rangeLats = obj[8];
-    rangeLngs = obj[9];
-    divMeasures_quant = obj[10];
+    shapeGridIds = obj[0];
+    diversityMeasures = obj[1];
+    nseqs = obj[2];
+    infoHtmls = obj[3];
+    nsps = obj[4];
+    nsegs = obj[5];
+    nbps = obj[6];
+    rangeGridIds = obj[7];
+    divMeasures_quant = obj[8];
     if ($('#rectSymbol').is(":checked")) {
-      showRectangles(obj[0], obj[1]);
+      showRectangles();
     } else {
-      showCircles(obj[0], obj[1]);
+      showCircles();
     }
     if ($('#showRange').is(":checked")) {
       drawRange();
@@ -523,17 +526,30 @@ function updateShapeColors() {
 $(document).ready(function() {
   $('#refresher').click(function() {
     var spType = "none";
-    if ($('#mammals').is(":visible")) {
+    if ($('#mammals_cytb').is(":visible")) {
+      spType = "mammals";
+    } else if ($('#mammals_coi').is(":visible")) {
       spType = "mammals";
     } else if ($('#amphibians').is(":visible")) {
       spType = "amphibians";
     }
+
     $('#infoDiv').html("");
     $('#genbankDiv').html("");
     var strDis = "";
     var species;
+    var gene = $("#geneRadio input[type='radio']:checked");
+    if (gene.length > 0) {
+        gene = gene.val();
+    } else {
+        gene = "cytb";
+    }
     if (spType == "mammals") {
-      species = $('#mammalNames').val();
+      if (gene == "cytb") {
+          species = $('#mammalNames_cytb').val();
+      } else {
+          species = $('#mammalNames_coi').val();
+      }
     } else if (spType == "amphibians") {
       species = $('#amphibianNames').val();
     }
@@ -547,10 +563,11 @@ $(document).ready(function() {
 //      $('#temporary').html("hehe 000");
       return 0;
     }
-    colorMap(spType, species);
+    colorMap(spType, species, gene);
   });
   $('#resetter').click(function(){
-    $('#mammalNames').val('');
+    $('#mammalNames_cytb').val('');
+    $('#mammalNames_coi').val('');
     $('#amphibianNames').val('');
     $('#chosenSpecies').val('');
     $('#showRange').prop('checked', false);
@@ -561,6 +578,7 @@ $(document).ready(function() {
       shapesPlotted[i].setMap(null);
     }
     shapesPlotted.length = 0;
+    shapeGridIds.length = 0;
     $('#minmeasure').html("");
     $('#maxmeasure').html("");
     $('#infoDiv').html("");
@@ -600,12 +618,47 @@ $(document).ready(function() {
     spType = $(this).val();
     if (spType == 'mammals') {
       $('#amphibians').hide();
-      $('#mammals').show();
-      $('#mammalNames').change();
+      $('#mammals_cytb').show();
+      $('#mammalNames_cytb').change();
+      $('#mammals_coi').hide();
+      $('#amphibians').hide();
+      $('#coi').removeAttr("disabled");
+      $('#coiText').css('color', '#555753');
     } else {
-      $('#mammals').hide();
+      $('#mammals_cytb').hide();
+      $('#mammals_co1').hide();
       $('#amphibians').show();
       $('#amphibianNames').change();
+      $('#coi').attr("disabled", true);
+      $('#coiText').css('color', '#B5B7B3');
+      $('input[name=gene][value=cytb]').trigger("click");
+    }
+  });
+  $('input[name=gene]').on('change', function() {
+    var gene = $(this).val();
+    var spType = "none";
+    if ($('#amphibians').is(":visible")) {
+      spType = "amphibians";
+    } else {
+      spType = "mammals";
+    }
+    if (gene == "coi") {
+      $('#amphibians').hide();
+      $('#mammals_cytb').hide();
+      $('#mammals_coi').show();
+      $('#mammalNames_coi').change();
+    } else {
+      if (spType == "mammals") {
+        $('#amphibians').hide();
+        $('#mammals_coi').hide();
+        $('#mammals_cytb').show();
+        $('#mammalNames_cytb').change();
+      } else {
+        $('#mammals_cytb').hide();
+        $('#mammals_coi').hide();
+        $('#amphibians').show();
+        $('#amphibianNames').change();
+      }
     }
   });
   $('input[name=symbol]').on('change', function() {
