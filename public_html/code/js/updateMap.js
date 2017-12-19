@@ -127,7 +127,7 @@ function colorCode(fadeProp, r0, r1, g0, g1, b0, b1) {
 }
 
 var paperColors = ["#004C73","#0084A8","#89CD66","#D1FF73","#FFFF73","#FFAA00","#FF5500","#A80000"];
-var paperColorScheme = false;
+var paperColorScheme = true;
 function updateColorbar() {
     nbins = 104;
     if (paperColorScheme) {
@@ -151,7 +151,7 @@ function updateColorbar() {
         }
     }
     $("#colorbar").append(gradient);
-    $("#colorbar").css("width","300px").css("height","30px");
+    $("#colorbar").css("width","300px").css("height","20px");
 }
 
 function grayscale() {
@@ -201,15 +201,38 @@ var nseqs = [];
 var nsps = [];
 var nbps = [];
 var nsegs = [];
-var infoHtmls = [];
+var w;
+var chosenSpType;
+var chosenSpecies;
+var chosenGene;
+var tempStr = "";
 
-function attachListenerWithSeqMsg(rect, gridId, nsps, nseq, msg, diversity, nseg, nbp) {
+function attachListenerWithSeqMsg(rect, gridId, nsps, nseq, diversity, nseg, nbp) {
   rect.addListener('click', function(msevent) {
-    updateInfoDiv(gridId, nsps, nseq, msg, diversity, nseg, nbp);
+    updateInfoDiv(gridId, nsps, nseq, diversity, nseg, nbp);
   });
 }
 
-function updateInfoDiv(gridId, nsp, nseq, infoString, diversity, nseg, nbp) {
+function updateHtml(replaceHtml) {
+  $('#genbankDiv').html(replaceHtml);
+}
+function updateGenbankDiv(response) {
+  var obj = $.parseJSON(response);
+  tempStr = obj[0];
+  htmlstr = "<h4 style='color:red'>Fetching sequences in the grid</h4>";
+  $('#genbankDiv').html(htmlstr);
+  htmlstr = "<h4><a href='http://www.ncbi.nlm.nih.gov/genbank/' target='_blank'>GenBank</a> information</h4>";
+  htmlstr += "<table class='gentable'><thead><tr><th width='50%'>Species</th>";
+  htmlstr += "<th width='25%'>Location</th>";
+  htmlstr += "<th width='25%'>ID</th></tr></thead>";
+  htmlstr += "<tbody>";
+  htmlstr += tempStr;
+  htmlstr += "</tbody></table>";
+  setTimeout(function(){updateHtml(htmlstr);}, 500);
+}
+
+
+function updateInfoDiv(gridId, nsp, nseq, diversity, nseg, nbp) {
   htmlstr = "<h3>Information on chosen location</h3>";
   htmlstr += "<h4>Sampling grid location</h4>";
   var latIndex = Math.floor(gridId/90);
@@ -228,15 +251,39 @@ function updateInfoDiv(gridId, nsp, nseq, infoString, diversity, nseg, nbp) {
   htmlstr += "<b># basepairs: "+nbp+"</b></br>";
   htmlstr += "<b>Diversity: "+diversity+"</b>";
   $('#infoDiv').html(htmlstr);
-  htmlstr = "<h4><a href='http://www.ncbi.nlm.nih.gov/genbank/' target='_blank'>GenBank</a> information</h4>";
-  htmlstr += "<table class='gentable'><thead><tr><th width='50%'>Species</th>"
-  htmlstr += "<th width='25%'>Location</th>"
-  htmlstr += "<th width='25%'>ID</th></tr></thead>"
-  htmlstr += "<tbody>"
-  htmlstr += infoString;
-  htmlstr += "</tbody></table>"
-//  htmlstr += "<a href=" " target='_blank'></a>"
-  $('#genbankDiv').html(htmlstr);
+  $.ajax({
+    url: "/download",
+    type: "post",
+    datatype:"json",
+    data: {"spType": chosenSpType, "species": chosenSpecies, "gene": chosenGene, "grid":gridId},
+    success: function(response){
+      // Execute our callback function
+      updateGenbankDiv(response);
+    }
+  });
+}
+
+function popupMapInfo() {
+  htmlstr = "Lat1 Lat2 Lng1 Lng2 #Species #Seqs #SegSites #Basepairs DiversitMeasure</br>";
+  for (i=0; i < shapeGridIds.length; i++) {
+    var gridId = shapeGridIds[i];
+    var latIndex = Math.floor(gridId/90);
+    var lngIndex = gridId%90 - 1;
+    htmlstr += Math.round(gridLatsPos[latIndex]*100)/100+" ";
+    htmlstr += Math.round(gridLatsPos[latIndex+1]*100)/100+" ";
+    htmlstr += Math.round(gridLngsPos[lngIndex]*100)/100+" ";
+    htmlstr += Math.round(gridLngsPos[lngIndex+1]*100)/100+" ";
+    htmlstr += nsps[i]+" ";
+    htmlstr += nseqs[i]+" ";
+    htmlstr += nsegs[i]+" ";
+    htmlstr += nbps[i]+" ";
+    htmlstr += diversityMeasures[i]+"<br/>";
+  }
+  if (typeof(w) == 'undefined' || w.closed) {
+    w = window.open('', "", "width=600, height=400, scrollbars=yes");
+  }
+  $(w.document.body).html(htmlstr);
+  $(w).focus();
 }
 
 function showRectangles() {
@@ -305,7 +352,7 @@ function showRectangles() {
       strokeOpacity: opac,
       clickable: true
     });
-    attachListenerWithSeqMsg(curRect, shapeGridIds[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
+    attachListenerWithSeqMsg(curRect, shapeGridIds[i], nsps[i], nseqs[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curRect);
   }
 }
@@ -329,6 +376,10 @@ function showCircles() {
     plotMeasures = divMeasures_quant;
     minMeasure = 0;
     maxMeasure = 100;
+  }
+  var scaleCirc = false;
+  if ($('#scaleCircles').is(':checked')) {
+    scaleCirc = true;
   }
   $('#minmeasure').html(minMeasure);
   $('#maxmeasure').html(maxMeasure);
@@ -362,8 +413,14 @@ function showCircles() {
   }
   var mxNseqs = Math.max.apply(Math, nseqs);
   var curSeqs = [];
-  for (i=0; i < nseqs.length; i++) {
-    curSeqs.push(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1));
+  if (scaleCirc) {
+    for (i=0; i < nseqs.length; i++) {
+      curSeqs.push(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1));
+    }
+  } else {
+    for (i=0; i < nseqs.length; i++) {
+      curSeqs.push(1);
+    }
   }
   for (i=0; i < shapeGridIds.length; i++) {
     var latIndex = Math.floor(shapeGridIds[i]/90);
@@ -375,7 +432,7 @@ function showCircles() {
       center: new google.maps.LatLng(midlat, midlng),
       // Length of 1 degree of longitude at equator is 111321 m
       radius: curSeqs[i]*2*Math.cos(Math.max(Math.abs(gridLatsPos[latIndex]),Math.abs(gridLatsPos[latIndex+1]))
-                                    *Math.PI/180)*111321,
+                                    *Math.PI/180)*85000,
       fillColor: colors[i],
       fillOpacity: opac,
       strokeWeight: 1,
@@ -383,7 +440,7 @@ function showCircles() {
       strokeOpacity: opac,
       clickable: true
     });
-    attachListenerWithSeqMsg(curCirc, shapeGridIds[i], nsps[i], nseqs[i], infoHtmls[i], diversityMeasures[i], nsegs[i], nbps[i]);
+    attachListenerWithSeqMsg(curCirc, shapeGridIds[i], nsps[i], nseqs[i], diversityMeasures[i], nsegs[i], nbps[i]);
     shapesPlotted.push(curCirc);
   }
 }
@@ -392,8 +449,12 @@ function switchShapes() {
   var lats = [];
   var lngs = [];
   if ($('#rectSymbol').is(":checked")) {
+    $('#scaleCircles').attr("disabled", true);
+    $('#scaleText').css('color', '#B5B7B3');
     showRectangles();
   } else {
+    $('#scaleCircles').removeAttr("disabled");
+    $('#scaleText').css('color', '#555753');
     showCircles();
   }
 }
@@ -436,6 +497,9 @@ function drawRange() {
 }
 
 function colorMap(spType, species, gene) {
+  chosenSpType = spType;
+  chosenSpecies = species;
+  chosenGene = gene;
   $.ajax({
     url: "/remap",
     type: "post",
@@ -453,12 +517,11 @@ function updateMap(response) {
     shapeGridIds = obj[0];
     diversityMeasures = obj[1];
     nseqs = obj[2];
-    infoHtmls = obj[3];
-    nsps = obj[4];
-    nsegs = obj[5];
-    nbps = obj[6];
-    rangeGridIds = obj[7];
-    divMeasures_quant = obj[8];
+    nsps = obj[3];
+    nsegs = obj[4];
+    nbps = obj[5];
+    rangeGridIds = obj[6];
+    divMeasures_quant = obj[7];
     if ($('#rectSymbol').is(":checked")) {
       showRectangles();
     } else {
@@ -488,8 +551,13 @@ function updateShapeColors() {
     minMeasure = 0;
     maxMeasure = 100;
   }
-  $('#minmeasure').html(minMeasure);
-  $('#maxmeasure').html(maxMeasure);
+  if (plotMeasures.length > 0) {
+    $('#minmeasure').html(minMeasure);
+    $('#maxmeasure').html(maxMeasure);
+  } else {
+    $('#minmeasure').html("");
+    $('#maxmeasure').html("");
+  }
   if (paperColorScheme) {
     if (maxMeasure == minMeasure) {
       var tempColor = paperColors[4];
@@ -663,6 +731,19 @@ $(document).ready(function() {
   });
   $('input[name=symbol]').on('change', function() {
     switchShapes();
+  });
+  $('#scaleCircles').on('change', function() {
+    var mxNseqs = Math.max.apply(Math, nseqs);
+    if ($(this).is(':checked')) {
+      for (i=0; i < nseqs.length; i++) {
+        shapesPlotted[i].setRadius(shapesPlotted[i].getRadius()*(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1)));
+      }
+    } else {
+      for (i=0; i < nseqs.length; i++) {
+        shapesPlotted[i].setRadius(shapesPlotted[i].getRadius()/(Math.log(nseqs[i]+1)/Math.log(mxNseqs+1)));
+      }
+    }
+    showCircles();
   });
   // $('#amphibianNames').on('change', function() {
   //   if (('#amphibianNames').prop('selected'))

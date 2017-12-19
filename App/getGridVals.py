@@ -1,7 +1,7 @@
 import json
 from scipy.stats import percentileofscore
 
-data_root = "/home/shyamsg/diversityMap/App/data/"
+data_root = "/home/imapgenes/diversityMap/App/data/"
 
 def normalize(measures):
     """This function changes a numpy array to a uniform normal array.
@@ -32,17 +32,27 @@ def getSpeciesBoxes(speciesType, chosenSpecie):
     data.close()
     return rangeGridIds
 
-def getGenbankSeqsIds(dldir, chosenSpecies):
+def getGenbankSeqsIds(speciesType, chosenSpecies, gene, chosenGrid):
     """This function returns the information on the genbank ids for the chosen
     species. It returns a dictionary with the lat, lng as key and an array of
     genbank accession numbers as value.
     """
-    htmlLines = {}
+    if (speciesType == "mammals"):
+        if (gene == "cytb"):
+            dldir = data_root+"cytb_equaldis_mammals/"
+        elif (gene == "coi"):
+            dldir = data_root+"coi_equaldis_mammals/"
+    elif (speciesType == "amphibians"):
+        dldir = data_root+"cytb_equaldis_amphs/"
+    htmlLines = ""
     for specie in chosenSpecies:
         coordfile = open(dldir+specie+".coords")
         for line in coordfile:
             toks = line.strip().split()
-            curhtml = "<tr><td width='50%'>"
+            gridid = str(int(toks[5])+1)
+            if chosenGrid != gridid:
+                continue
+            curhtml = "<tr><td width='50%' class='spName'>"
             curhtml += specie.replace("_", " ")
             curhtml += "</td><td width='25%'><a href='http://www.google.com/maps/place/"
             curhtml += ",".join(toks[0:2])
@@ -56,13 +66,9 @@ def getGenbankSeqsIds(dldir, chosenSpecies):
             else:
                 curhtml += "NA"
             curhtml += "</td><td width='5%'></td></tr>"
-            gridid = str(int(toks[5])+1)
-            if gridid in htmlLines:
-                htmlLines[gridid] += curhtml
-            else:
-                htmlLines[gridid] = curhtml
+            htmlLines += curhtml
         coordfile.close()
-    return htmlLines
+    return(json.dumps([htmlLines]))
 
 def getMapBoxes(speciesType, chosenSpecies, gene, gdCol = 4, nseqCol = 2,
                 nsegCol = 3, nbpCol = 5):
@@ -73,13 +79,10 @@ def getMapBoxes(speciesType, chosenSpecies, gene, gdCol = 4, nseqCol = 2,
     if (speciesType == "mammals"):
         if (gene == "cytb"):
             infile = data_root+"mammals_cytb_ss_400_noNaN_noSingleSeq.txt"
-            dldir = data_root+"cytb_equaldis_mammals/"
         elif (gene == "coi"):
             infile = data_root+"mammals_coi_ss_400_noNaN_noSingleSeq.txt"
-            dldir = data_root+"coi_equaldis_mammals/"
     elif (speciesType == "amphibians"):
         infile = data_root+"amphs_cytb_ss_400_noNaN_noSingleSeq.txt"
-        dldir = data_root+"cytb_equaldis_amphs/"
     data = open(infile)
     # Read and discard header
     line = data.readline()
@@ -109,7 +112,7 @@ def getMapBoxes(speciesType, chosenSpecies, gene, gdCol = 4, nseqCol = 2,
     if len(chosenSpecies) == 1:
         rangeGridIds = getSpeciesBoxes(speciesType, chosenSpecies[0])
 
-    htmls = getGenbankSeqsIds(dldir, chosenSpecies)
+#    htmls = getGenbankSeqsIds(dldir, chosenSpecies)
 
     gridIds = []
     measures = []
@@ -125,7 +128,8 @@ def getMapBoxes(speciesType, chosenSpecies, gene, gdCol = 4, nseqCol = 2,
         nsegs.append(numSegSitesDict[gridId])
         nbps.append(numBasePairDict[gridId])
         nsps.append(len(numSpeciesDict[gridId]))
-        if gridId in htmls:
-            infoHtml.append(htmls[gridId])
+#        if gridId in htmls:
+#            infoHtml.append(htmls[gridId])
+#            infoHtml.append("")
     quantmeasures = normalize(measures)
-    return(json.dumps([gridIds, measures, nseqs, infoHtml, nsps, nsegs, nbps, rangeGridIds, quantmeasures]))
+    return(json.dumps([gridIds, measures, nseqs, nsps, nsegs, nbps, rangeGridIds, quantmeasures]))

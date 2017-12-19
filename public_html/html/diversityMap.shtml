@@ -17,6 +17,7 @@
 			$('#mammals_coi').hide();
 			$('#amphibians').load("/html/amphibiansList.html");
 			$('#amphibians').hide();
+			$('#popup').on('click', popupMapInfo);
 			updateColorbar();
         });
 	</script>
@@ -61,8 +62,8 @@
     		    			<a class="presetColor" onclick="divergent()">Divergent</a>
     				    </center>
     		    		<div id="colorChooserDiv">
-    			    	    <input class="jscolor" id="startColor" value="FFFF00" style="width:55px; text-align:center; border:1px dotted; float:left;"/>
-    				        <input class="jscolor" id="endColor" value="FF0000" style="width:55px; text-align:center; border:1px dotted; float:right;"/>
+    			    	    <input class="jscolor" id="startColor" value="#004C73" style="width:55px; text-align:center; border:1px dotted; float:left;"/>
+    				        <input class="jscolor" id="endColor" value="#A80000" style="width:55px; text-align:center; border:1px dotted; float:right;"/>
                         </div>
     			    	<div id="colorbar"></div>
     		    		<div id="minmaxDiv">
@@ -70,7 +71,7 @@
         					<span id="maxmeasure" style="float:right; text-align:right;"></span>
         				</div>
     				    <input type="checkbox" id="quantNorm" name="quantNorm"/>
-    				        <span><b>Plot quantiles instead of raw values</b></span>
+    				        <span><b>Plot quantiles instead of raw values</b></span> <br/>
     				</div>
     				<div id="plotopacDiv" style="float:left;">
     					<h4>Plotting opacity</h4>
@@ -78,15 +79,18 @@
     				</div>
     				<div id="plotsymbDiv">
     					<h4>Plotting symbol</h4>
-    					<input type="radio" id="rectSymbol" name="symbol" value="rect" checked/>
-    					<span><b>Rectangle</b></span>
-    					<input type="radio" id="circSymbol" name="symbol" value="circ"/>
+    					<input type="radio" id="circSymbol" name="symbol" value="circ" checked/>
     					<span><b>Circle</b></span>
+    					<input type="radio" id="rectSymbol" name="symbol" value="rect"/>
+    					<span><b>Rectangle</b></span>
+    					<br/>
+                        <input type="checkbox" id="scaleCircles" name="scaleCircles"/>
+        				<span id="scaleText"><b>Scale circles</b></span>
     				</div>
     				<div id="showGridDiv">
-    					<h4>Lat-Long Grid</h4>
+    					<h4>Behrmann grid</h4>
     					<input type="checkbox" id="showGrid" name="showGrid"/>
-    					<span><b>Show grid</b></span>
+    					<span><b>Show equal area grid</b></span>
     				</div>
     				<div id="showRangeDiv">
     					<h4 id="rangeHead">IUCN Species range</h4>
@@ -105,8 +109,10 @@
     			<!-- div style="float: top; tex-align: left;" -->
     			<!-- p style="text-align: left; position: relative; bottom: 25px;" -->
     			<p style="text-align: left;">
-    			For more information on functionality of the map, click <a href="/html/README.md">here</a>.
-    			Figure 1 from the paper can be found <a href="/images/Figure1_noCaption.pdf">here</a>.
+    			For more information on functionality of the map, click <a href="http://macroecology.ku.dk/resources/imapgenes/README.txt">here</a>.
+    			Figure 1 from the paper can be found <a href="http://macroecology.ku.dk/resources/imapgenes/Figure1_noCaption.pdf">here</a>.
+    			All sequences information (incl. species name, coordinates, accession number) can be <a href="http://macroecology.ku.dk/resources/imapgenes/seqs_info_tsv.zip">downloaded</a> as *.tsv files.
+        		<span style="float:right"><a id="popup" style="font-weight:bold;	color: #0000FF;">Download</a> the current map information.</span>
     			</p>
     			<!-- /div -->
 
@@ -114,6 +120,7 @@
 			<div id="information">
     			<div id="infoDiv"></div>
 	    		<div id="genbankDiv"></div>
+
             </div>
 		</div>
 	</div>

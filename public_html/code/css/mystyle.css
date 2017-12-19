@@ -102,6 +102,10 @@ abbr {
 	border: none;
 	margin: 3px 3px 3px 3px;
 }
+.spName {
+	font: arial, helvetica, sans-serif;
+	font-style: italic;
+}
 .spListDiv {
 	width:236px;
 	background-color: #757773;

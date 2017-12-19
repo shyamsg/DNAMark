@@ -65,3 +65,11 @@ Further information on a grid cell can be obtained by clicking on the symbol for
 number of species, sequences, bases and segregating sites are displayed. Additionally, all the sequences that have
 been used to compute the genetic diversity measures for the chosen species are displayed in a table with a link to their
 GenBank information. Clicking on the link opens up another tab with the GenBank information.
+
+Download data
+-------------
+1. You can extract data of grid cells shown on current map by clicking "Download" at the bottom-right of the map.
+
+2. You can download all sequences information (incl. species name, coordinates, accession number) we used in this study by
+clicking the link provided on the homepage of iMapGenes or at the bottom of the map or directly acess:
+http://macroecology.ku.dk/resources/imapgenes/seqs_info_tsv.zip
