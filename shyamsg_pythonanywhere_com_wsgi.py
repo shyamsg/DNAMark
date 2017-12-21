@@ -1,5 +1,5 @@
 # This file contains the WSGI configuration required to serve up your
-# web application at http://imapgenes.pythonanywhere.com/
+# web application at http://shyamsg.pythonanywhere.com/
 # It works by setting the variable 'application' to a WSGI handler of some
 # description.
 #
@@ -12,7 +12,7 @@
 
 HOME_PAGE = """<html>
   <head>
-    <meta http-equiv="refresh" content="0; /html/diversityMap.shtml">
+    <meta http-equiv="refresh" content="0; /html/DNAMark.shtml">
   </head>
 </html>
 """
@@ -28,9 +28,9 @@ DOWNLOAD_PAGE = """<html>
 import os
 import sys
 
-sys.path.append('/home/imapgenes/diversityMap/App/')
+sys.path.append('/home/shyamsg/DNAMark/App/')
 
-os.environ['PYTHON_EGG_CACHE'] = '/home/imapgenes/diversityMap/App/.python-egg'
+os.environ['PYTHON_EGG_CACHE'] = '/home/shyamsg/DNAMark/App/.python-egg'
 
 #def application(environ, start_response):
 #    if environ.get('PATH_INFO') == '/':
