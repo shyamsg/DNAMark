@@ -204,14 +204,32 @@ input[type=range]:focus::-ms-fill-lower {
 input[type=range]:focus::-ms-fill-upper {
     background: #737775;
 }
-/* End Code from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html*/
 
 /* specific divs */
 #header{
-	height:150px;
-	background-image: url(/images/diversity_of_species_white.jpg);
-	border: 1px solid;
-	width:1785px;
+    height: 160px;
+    min-width: 1700px;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    float: left;
+}
+#headerleft{
+    width: 456px;
+    float: left;
+    border: 2px solid;
+    padding: 10px 0px 0px 0px;
+}
+#headerright{
+    width: 611px;
+    float: left;
+    border: 2px solid;
+    padding: 10px 0px 0px 0px;
+}
+#headerinsta{
+    width: 150px;
+    float: right;
+    border: 2px solid;
 }
 #rangeMissing {
     position: relative;
@@ -232,17 +250,19 @@ input[type=range]:focus::-ms-fill-upper {
 	margin: 0;
 }
 #mapdiv {
-	width:1050px;
-	height:750px;
+	width:900px;
+	height:675px;
 	float:left;
 	margin: 10px 20px 10px 20px;
 	z-index: 3;
 }
 #mymap {
-	width:1050px;
-	height:750px;
+	width:900px;
+	height:675px;
 	float:center;
-	border: 2px solid;
+	border: 6px solid;
+	border-style: double;
+	border-color: #66aa66;
 /*	top: -27px; */
 }
 #control {

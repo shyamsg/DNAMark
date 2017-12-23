@@ -50,12 +50,12 @@ var fullyEmpty = [
 ];
   var mapDiv = document.getElementById("mymap");
   var mapOptions = {
-    center: new google.maps.LatLng(20, 0),
+    center: new google.maps.LatLng(56, 10.5),
     mapTypeControlOptions: {
       mapTypeIds: [ 'fullyEmpty', 'landscapeStyle', google.maps.MapTypeId.ROADMAP,
       google.maps.MapTypeId.TERRAIN ]
     },
-    zoom: 2,
+    zoom: 7,
     mapTypeId: 'fullyEmpty',
     streetViewControl: false,
   };

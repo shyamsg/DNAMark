@@ -1,7 +1,7 @@
 import json
 from scipy.stats import percentileofscore
 
-data_root = "/home/imapgenes/diversityMap/App/data/"
+data_root = "/home/shyamsg/DNAMark/App/data/"
 
 def normalize(measures):
     """This function changes a numpy array to a uniform normal array.
