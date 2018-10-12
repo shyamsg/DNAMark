@@ -3,150 +3,87 @@
 	<title>DNAMark</title>
 	<link rel="stylesheet" type="text/css" href="/code/css/mystyle.css">
 	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="https://code.jquery.com/jquery-3.2.1.js"
-             integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-             crossorigin="anonymous">
-    </script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.js"></script>
-	<link ref="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.2/rangeslider.min.css" media="all">
-	<script src="/code/js/jscolor.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/code/js/jscolor.js"></script>
 	<script src="/code/js/map.js"></script>
 	<script src="/code/js/updateMap.js"></script>
 	<script src="/code/js/instafeed.min.js"></script>
+	<script src="/code/js/species.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			$('#mammals_cytb').load("/html/mammalsList_cytb.html");
-			$('#mammals_cytb').show();
-			$('#mammals_coi').load("/html/mammalsList_coi.html");
-			$('#mammals_coi').hide();
-			$('#amphibians').load("/html/amphibiansList.html");
-			$('#amphibians').hide();
-			$('#popup').on('click', popupMapInfo);
-			updateColorbar();
-        });
+	$("#speciesName").autocomplete({
+	source: speciesList
+	});
 	</script>
-    <script type="text/javascript">
-        var userFeed = new Instafeed({
-            get: 'user',
-            userId: '6081033671',
-            accessToken: '6081033671.1677ed0.faec4f6433e64a39a919346e288ba2db',
-            resolution: 'thumbnail',
-            target: 'headerinsta',
-            limit: 6,
-            links: 'yes'
-        });
-        userFeed.run();
-        var myVar = setInterval(myTimer, 1000000);
-        function myTimer() {
-            userFeed.run();
-        }
-    </script>
+	  <script>
+  $( function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  } );
+  </script>
+    <script src="/code/js/instagramScripts.js"></script>
 	<noscript>Your browser does not support Javascript!</noscript>
 </head>
 <body>
 	<div id="fullbody" align="center">
 		<div id="header">
 		    <div id="headerleft">
-    		    <img src="/images/Aage_V_jensen_logo1.jpg", width="456px">
+    		    <img src="/images/Aage_V_jensen_logo1.jpg", width="100%">
 	    	</div>
 		    <div id="headerright">
 		        <img src="/images/DNA_mark_NEW-Green_HORIZONTAL.jpg" height=120>
     		</div>
-    		<div id="headerinsta">
+            <div id="instafull">
+                <div id="instalink">
+                    <a target="_blank" title="follow us on instagram" href="http://www.instagram.com/dnamark_">
+                        <img alt="Follow DNAmark on instagram" src="https://c866088.ssl.cf3.rackcdn.com/assets/badgeinstagram.png">
+                    </a>
+                </div>
+    		    <div id="headerinsta"></div>
             </div>
 		</div>
 		<div id="main">
     		<div id="control">
-    			<div id="speciesControl">
-    				<h3>Species input controls</h3>
-    				<h4>Species type </h4>
-    				<div id="speciesRadio">
-    					<input type="radio" name="speciesType" value="mammals" checked/>
-    					<span><b>Mammals</b> </span>
-    					<input type="radio" name="speciesType" value="amphibians"/>
-    					<span><b>Amphibians</b> </span>
-    				</div>
-    				<div id="mammals_cytb" class="spListDiv"></div>
-    				<div id="mammals_coi" class="spListDiv"></div>
-    				<div id="amphibians" class="spListDiv"></div>
-    				<h4>Gene </h4>
-    				<div id="geneRadio">
-    					<input type="radio" id="cytb" name="gene" value="cytb" checked/>
-    					<span><b>Cytb</b> </span>
-    					<input type="radio" id="coi" name="gene" value="coi"/>
-    					<span id="coiText"><b>Co1</b> </span>
+    			<div id="speciesControl" class="ui-widget">
+    				<h3>Search species or locations</h3>
+    				<h4>Species</h4>
+    				<div id="Species name">
+    					<input name="speciesName" id="speciesName" placeholder="Gulo gulo">
+    					<input name="speciesName" id="tags" placeholder="Gulo gulo">
     				</div>
     			</div>
-    			<!-- div id="plotControl">
-    				<h3>Plotting controls</h3>
-    				<h4>Plotting colors</h4>
-    				<div id="presetColorDiv">
-    					<center>
-        					<a class="presetColor" onclick="heatmap()">Heatmap</a>
-        					<a class="presetColor" onclick="grayscale()">Grayscale</a>
-    	    				<a class="presetColor" onclick="redgreen()">Red-Green</a>
-    		    			<a class="presetColor" onclick="divergent()">Divergent</a>
-    				    </center>
-    		    		<div id="colorChooserDiv">
-    			    	    <input class="jscolor" id="startColor" value="#004C73" style="width:55px; text-align:center; border:1px dotted; float:left;"/>
-    				        <input class="jscolor" id="endColor" value="#A80000" style="width:55px; text-align:center; border:1px dotted; float:right;"/>
-                        </div>
-    			    	<div id="colorbar"></div>
-    		    		<div id="minmaxDiv">
-    	    				<span id="minmeasure" style="float:left; text-align:left;"></span>
-        					<span id="maxmeasure" style="float:right; text-align:right;"></span>
-        				</div>
-    				    <input type="checkbox" id="quantNorm" name="quantNorm"/>
-    				        <span><b>Plot quantiles instead of raw values</b></span> <br/>
-    				</div>
-    				<div id="plotopacDiv" style="float:left;">
-    					<h4>Plotting opacity</h4>
-    					<input id="opacity" type="range" min="0" max="100" value="80"/>
-    				</div>
-    				<div id="plotsymbDiv">
-    					<h4>Plotting symbol</h4>
-    					<input type="radio" id="circSymbol" name="symbol" value="circ" checked/>
-    					<span><b>Circle</b></span>
-    					<input type="radio" id="rectSymbol" name="symbol" value="rect"/>
-    					<span><b>Rectangle</b></span>
-    					<br/>
-                        <input type="checkbox" id="scaleCircles" name="scaleCircles"/>
-        				<span id="scaleText"><b>Scale circles</b></span>
-    				</div>
-    				<div id="showGridDiv">
-    					<h4>Behrmann grid</h4>
-    					<input type="checkbox" id="showGrid" name="showGrid"/>
-    					<span><b>Show equal area grid</b></span>
-    				</div>
-    				<div id="showRangeDiv">
-    					<h4 id="rangeHead">IUCN Species range</h4>
-    					<input type="checkbox" id="showRange" name="showRange"/>
-    					<span id="rangeText"><b>Show range (if 1 species chosen)</b></span>
-    				</div>
-    				<div id="buttons">
-    					<button class="btn" id="resetter" name="resetter">Reset Map</button>
-    					<button class="btn" id="refresher" name="refresher">Refresh Map</button>
-    				</div>
-    			</div -->
 			</div>
 			<div id="mapdiv">
-                <!-- div id="rangeMissing">Range information not available for chosen species</div -->
     			<div id="mymap"></div>
-    			<!-- div style="float: top; tex-align: left;" -->
-    			<!-- p style="text-align: left; position: relative; bottom: 25px;" -->
-    			<!--p style="text-align: left;">
-    			For more information on functionality of the map, click <a href="http://macroecology.ku.dk/resources/imapgenes/README.txt">here</a>.
-    			Figure 1 from the paper can be found <a href="http://macroecology.ku.dk/resources/imapgenes/Figure1_noCaption.pdf">here</a>.
-    			All sequences information (incl. species name, coordinates, accession number) can be <a href="http://macroecology.ku.dk/resources/imapgenes/seqs_info_tsv.zip">downloaded</a> as *.tsv files.
-        		<span style="float:right"><a id="popup" style="font-weight:bold;	color: #0000FF;">Download</a> the current map information.</span>
-    			</p -->
-    			<!-- /div -->
-
             </div>
 			<div id="information">
     			<div id="infoDiv"></div>
 	    		<div id="genbankDiv"></div>
-
             </div>
 		</div>
 	</div>

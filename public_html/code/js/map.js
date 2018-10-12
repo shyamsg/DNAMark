@@ -53,10 +53,10 @@ var fullyEmpty = [
     center: new google.maps.LatLng(56, 10.5),
     mapTypeControlOptions: {
       mapTypeIds: [ 'fullyEmpty', 'landscapeStyle', google.maps.MapTypeId.ROADMAP,
-      google.maps.MapTypeId.TERRAIN ]
+      google.maps.MapTypeId.TERRAIN, 'OSM' ]
     },
     zoom: 7,
-    mapTypeId: 'fullyEmpty',
+    mapTypeId: 'OSM',
     streetViewControl: false,
   };
   map = new google.maps.Map(mapDiv, mapOptions);

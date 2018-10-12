@@ -13,13 +13,14 @@ html {
 	margin: 0;
 	padding: 0;
 	background-color:#ffffff;
-	}
+}
 body {
 	font: 85% arial, helvetica, sans-serif;
 	line-height: 1.88889;
 	color: #555753;
 	margin: 0;
 	padding: 0;
+	background-color: #ffffff;
 	}
 p {
 	margin-top: 0;
@@ -215,21 +216,31 @@ input[type=range]:focus::-ms-fill-upper {
     float: left;
 }
 #headerleft{
-    width: 456px;
+    width: 334px;
     float: left;
-    border: 2px solid;
-    padding: 10px 0px 0px 0px;
+    padding: 2px 0px 0px 0px;
 }
 #headerright{
     width: 611px;
     float: left;
-    border: 2px solid;
-    padding: 10px 0px 0px 0px;
+    padding: 2px 0px 0px 0px;
+}
+#instafull{
+    width: 150px;
+    height:150px;
+    float:right;
 }
 #headerinsta{
     width: 150px;
     float: right;
     border: 2px solid;
+}
+#instalink {
+	width: 150px;
+	margin: 0px 0px 0px 0px;
+	padding: 2px 0px 2px 0px;
+	height: 70px;
+	float: right;
 }
 #rangeMissing {
     position: relative;
@@ -318,7 +329,7 @@ input[type=range]:focus::-ms-fill-upper {
 	margin:0px 0px 20px 0px;
 }
 #information{
-    width:390px;
+    width: calc(100% - 1200px);
 	float:right;
 	margin: 0px 0px 0px 0px;
 	height:750px;
@@ -331,8 +342,9 @@ input[type=range]:focus::-ms-fill-upper {
 #genbankDiv {
 	width:390px;
 	margin: 0px 0px 0px 0px;
-	height:550px;
+	height:400px;
 }
+
 table.gentable {
 		display: table;
 		width: 100%;
