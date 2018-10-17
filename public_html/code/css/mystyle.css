@@ -12,7 +12,7 @@
 html {
 	margin: 0;
 	padding: 0;
-	background-color:#333;
+	background-color:#ddd;
 }
 body {
 	font: 85% arial, helvetica, sans-serif;
@@ -20,7 +20,6 @@ body {
 	color: #555753;
 	margin: 0;
 	padding: 0;
-	background-color: #333;
 	}
 p {
 	margin-top: 0;
@@ -211,7 +210,7 @@ input[type=range]:focus::-ms-fill-upper {
 	background-color: #888;
 }
 #header{
-    height: 300px;
+    height: 400px;
     min-width: 1500px;
     width: 100%;
     margin: 0px;
@@ -219,15 +218,15 @@ input[type=range]:focus::-ms-fill-upper {
     float: left;
 }
 #Dnamarklogo{
-/*    width: 334px; */
     float: left;
     padding: 2px 2px 2px 2px;
 }
-#headerright{
-    width: 611px;
+#SearchBar{
     float: left;
-    padding: 2px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    width: 100%;
 }
+
 #instafull{
     width: 150px;
     height:150px;

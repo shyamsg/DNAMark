@@ -8,7 +8,6 @@
     <script src="/code/js/jscolor.js"></script>
 	<script src="/code/js/map.js"></script>
 	<script src="/code/js/updateMap.js"></script>
-	<script src="/code/js/instafeed.min.js"></script>
 	<script>
   $( function() {
     var availableTags = [
@@ -40,8 +39,11 @@
     });
   } );
   </script>
-  <script src="/code/js/instagramScripts.js"></script>
+  <!-- script src="/code/js/instafeed.min.js"></script -->
+  <!-- script src="/code/js/instagramScripts.js"></script -->
+  <script src="/code/js/header.js"></script>
 	<noscript>Your browser does not support Javascript!</noscript>
+
 </head>
 <body>
 	<div id="fullbody" align="left">
@@ -49,8 +51,8 @@
 			<div id="Dnamarklogo">
 		      <img src="/images/DNA_mark_NEW-Green.png" height=300>
     	</div>
-      <div id="SeachBar">
-    	</div>
+      <div id="SearchBar" style="background-image: url(Header1.gif);" width="100%" height=400>
+      </div>
       <!--div id="instafull">
                 <div id="instalink">
                     <a target="_blank" title="follow us on instagram" href="http://www.instagram.com/dnamark_">
