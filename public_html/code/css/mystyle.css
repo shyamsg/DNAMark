@@ -207,6 +207,9 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 /* specific divs */
+#fullbody{
+	background-color: #888;
+}
 #header{
     height: 200px;
     min-width: 1500px;
