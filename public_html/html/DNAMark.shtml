@@ -9,13 +9,7 @@
 	<script src="/code/js/map.js"></script>
 	<script src="/code/js/updateMap.js"></script>
 	<script src="/code/js/instafeed.min.js"></script>
-	<script src="/code/js/species.js"></script>
-	<script type="text/javascript">
-	$("#speciesName").autocomplete({
-	source: speciesList
-	});
-	</script>
-	  <script>
+	<script>
   $( function() {
     var availableTags = [
       "ActionScript",
@@ -46,19 +40,18 @@
     });
   } );
   </script>
-    <script src="/code/js/instagramScripts.js"></script>
+  <script src="/code/js/instagramScripts.js"></script>
 	<noscript>Your browser does not support Javascript!</noscript>
 </head>
 <body>
-	<div id="fullbody" align="center">
+	<div id="fullbody" align="left">
 		<div id="header">
-		    <div id="headerleft">
-    		    <img src="/images/Aage_V_jensen_logo1.jpg", width="100%">
-	    	</div>
-		    <div id="headerright">
-		        <img src="/images/DNA_mark_NEW-Green_HORIZONTAL.jpg" height=120>
-    		</div>
-            <div id="instafull">
+			<div id="Dnamarklogo">
+		      <img src="/images/DNAMark_logo_Background_Grey.jpg" height=120>
+    	</div>
+      <div id="SeachBar">
+    	</div>
+      <!--div id="instafull">
                 <div id="instalink">
                     <a target="_blank" title="follow us on instagram" href="http://www.instagram.com/dnamark_">
                         <img alt="Follow DNAmark on instagram" src="https://c866088.ssl.cf3.rackcdn.com/assets/badgeinstagram.png">
@@ -66,7 +59,7 @@
                 </div>
     		    <div id="headerinsta"></div>
             </div>
-		</div>
+		</div -->
 		<div id="main">
     		<div id="control">
     			<div id="speciesControl" class="ui-widget">

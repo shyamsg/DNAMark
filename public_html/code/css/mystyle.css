@@ -208,17 +208,17 @@ input[type=range]:focus::-ms-fill-upper {
 
 /* specific divs */
 #header{
-    height: 160px;
-    min-width: 1700px;
+    height: 200px;
+    min-width: 1500px;
     width: 100%;
     margin: 0px;
     padding: 0px;
     float: left;
 }
-#headerleft{
-    width: 334px;
+#Dnamarklogo{
+/*    width: 334px; */
     float: left;
-    padding: 2px 0px 0px 0px;
+    padding: 2px 2px 2px 2px;
 }
 #headerright{
     width: 611px;
