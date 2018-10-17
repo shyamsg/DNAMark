@@ -47,7 +47,7 @@
 	<div id="fullbody" align="left">
 		<div id="header">
 			<div id="Dnamarklogo">
-		      <img src="/images/DNA_mark_NEW-Green.png" height="100%">
+		      <img src="/images/DNA_mark_NEW-Green.png" height=300>
     	</div>
       <div id="SeachBar">
     	</div>
