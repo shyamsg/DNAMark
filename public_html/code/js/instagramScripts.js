@@ -8,7 +8,7 @@ var userFeed = new Instafeed({
     limit: 5
 });
 userFeed.run();
-var myVar = setInterval(myTimer, 5000);
+var myVar = setInterval(myTimer, 10000);
 function myTimer() {
     if (userFeed.hasNext()) {
         $('#headerinsta').html("");

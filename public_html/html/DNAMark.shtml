@@ -2,85 +2,70 @@
 <head>
 	<title>DNAMark</title>
 	<link rel="stylesheet" type="text/css" href="/code/css/mystyle.css">
-	<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/code/css/prettydropdowns.css">
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!--script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script-->
+    <script src="/code/js/jquery.prettydropdowns.js"></script>
     <script src="/code/js/jscolor.js"></script>
 	<script src="/code/js/map.js"></script>
 	<script src="/code/js/updateMap.js"></script>
-	<script>
-  $( function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
-    });
-  } );
-  </script>
-  <!-- script src="/code/js/instafeed.min.js"></script -->
-  <!-- script src="/code/js/instagramScripts.js"></script -->
-  <script src="/code/js/header.js"></script>
+    <script src="/code/js/header.js"></script>
+    <!--script src="/code/js/instafeed.min.js"></script-->
+    <!-script src="/code/js/instagramScripts.js"></script-->
 	<noscript>Your browser does not support Javascript!</noscript>
-
 </head>
 <body>
-	<div id="fullbody" align="left">
 		<div id="header">
 			<div id="Dnamarklogo">
 		      <img src="/images/DNA_mark_NEW-Green.png" height=300>
-    	</div>
-      <div id="SearchBar" style="background-image: url(Header1.gif);" width="100%" height=400>
-      </div>
-      <!--div id="instafull">
+    	    </div>
+            <div id="SearchBar" style="background-image: url(/images/Header1.jpg);">
+                <div id="spacefiller"> </div>
+                <div id="SearchInput">
+                    <input id="SampleSearch" name="SampleSearch" placeholder="Martes martes">
+                </div>
+                <div class="scroller">
+                  <a href="#" onclick="switchBackground(0);"></a>
+                  <a href="#" onclick="switchBackground(1);"></a>
+                  <a href="#" onclick="switchBackground(2);"></a>
+                  <a href="#" onclick="switchBackground(3);"></a>
+                  <a href="#" onclick="switchBackground(4);"></a>
+                </div>
+            </div>
+            <!--div id="instafull">
                 <div id="instalink">
                     <a target="_blank" title="follow us on instagram" href="http://www.instagram.com/dnamark_">
                         <img alt="Follow DNAmark on instagram" src="https://c866088.ssl.cf3.rackcdn.com/assets/badgeinstagram.png">
                     </a>
                 </div>
     		    <div id="headerinsta"></div>
-            </div>
-		</div -->
-		<div id="main">
-    		<div id="control">
-    			<div id="speciesControl" class="ui-widget">
-    				<h3>Search species or locations</h3>
-    				<h4>Species</h4>
-    				<div id="Species name">
-    					<input name="speciesName" id="speciesName" placeholder="Gulo gulo">
-    					<input name="speciesName" id="tags" placeholder="Gulo gulo">
-    				</div>
-    			</div>
-			</div>
-			<div id="mapdiv">
-    			<div id="mymap"></div>
-            </div>
-			<div id="information">
-    			<div id="infoDiv"></div>
-	    		<div id="genbankDiv"></div>
+            </div -->
+		</div>
+		<div id="SamplePlusMap">
+		    <div id="speciesChoice">
+		        <label for="size">Kingdom:</label><br>
+                <select id="kingdom" name="kingdom" class="pretty">
+                  <option>32</option>
+                  <option>33</option>
+                  <option>34</option>
+                  <option>35</option>
+                  <option>36</option>
+                  <option>37</option>
+                  <option>38</option>
+                  <option>39</option>
+                  <option>40</option>
+                </select>
+		    </div>
+		    <div id="mapdiv">
+    		    <div id="mymap"></div>
             </div>
 		</div>
-	</div>
+<script>
+    $(document).ready(function() {
+      // Initiate Pretty Dropdowns
+      $('.pretty').prettyDropdown();
+    });
+</script>
 </body>
 </html>

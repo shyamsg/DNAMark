@@ -211,7 +211,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #header{
     height: 400px;
-    min-width: 1500px;
+    min-width: 1700px;
     width: 100%;
     margin: 0px;
     padding: 0px;
@@ -222,9 +222,50 @@ input[type=range]:focus::-ms-fill-upper {
     padding: 2px 2px 2px 2px;
 }
 #SearchBar{
+    width: 1200px;
+    height: inherit;
     float: left;
-    padding: 0px 0px 0px 0px;
+    background-repeat: no-repeat;
+    background-position: left;
+    margin: 10px 20px 10px 20px;
+}
+
+#spacefiller{
     width: 100%;
+    height: 80%;
+}
+#SearchInput{
+    height: 50px;
+    margin: auto;
+    text-align: center;
+}
+
+#SampleSearch{
+    height: 30px;
+    font-family: arial helvetica sans-serif;
+    font-size: 20;
+}
+.scroller {
+    height: 30px;
+    text-align: center;
+}
+.scroller > a {
+  display: inline-flex;
+  width: .5rem;
+  height: .5rem;
+  background: white;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 0 0.5rem 0;
+  position: relative;
+}
+.scroller > a:active {
+  top: 1px;
+}
+.scroller > a:focus {
+  background: #bbb;
 }
 
 #instafull{
@@ -244,109 +285,32 @@ input[type=range]:focus::-ms-fill-upper {
 	height: 70px;
 	float: right;
 }
-#rangeMissing {
-    position: relative;
-    top: 5px;
-    z-index: 0;
-    background-color: #fff;
-    padding: 2px;
-    border: 1px solid #999;
-    text-align: center;
-    font-family: arial helvetica sans-serif;
-    line-height: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
-    width: 300px;
+#SamplePlusMap {
+    height: 675px;
+    min-width: 1700px;
 }
-#main {
-	width:1785px;
-	margin: 0;
+#speciesChoice {
+    width: 300px;
+    height: 675px;
+    margin: 10px 2px 10px 2px;
+	float: left;
 }
 #mapdiv {
-	width:900px;
+	width:1200px;
 	height:675px;
-	float:left;
+	float: left;
 	margin: 10px 20px 10px 20px;
 	z-index: 3;
 }
 #mymap {
-	width:900px;
+	width:1200px;
 	height:675px;
 	float:center;
-	border: 6px solid;
+/*	border: 6px solid;
 	border-style: double;
 	border-color: #66aa66;
-/*	top: -27px; */
+*/
 }
-#control {
-	width:300px;
-	float: left;
-	margin:0px 0px 0px 0px;
-}
-#speciesControl {
-	width:300px;
-	float: left;
-}
-#speciesRadio {
-	width:300px;
-/*	float: left; */
-	margin-top: 5px;
-}
-#plotControl {
-	width:300px;
-	float:left;
-}
-#presetColorDiv {
-	width: inherit;
-	margin: 0px 0px 3px 0px;
-	float: left;
-}
-#buttons {
-	width:300px;
-	float: none;
-	clear: both;
-	text-align: center;
-	margin-top:70px;
-}
-#plotsymbDiv {
-	width:180px;
-	float:left;
-}
-#showGridDiv {
-	width:120px;
-	float:right;
-}
-#showRangeDiv {
-	width:300px;
-	float:left;
-}
-#minmaxDiv{
-	width:inherit;
-	font: arial, helvetica, sans-serif;
-	margin:0px 0px 26px 0px;
-}
-#colorChooserDiv{
-	width:inherit;
-	font: arial, helvetica, sans-serif;
-	margin:0px 0px 20px 0px;
-}
-#information{
-    width: calc(100% - 1200px);
-	float:right;
-	margin: 0px 0px 0px 0px;
-	height:750px;
-}
-#infoDiv {
-	width:390px;
-	margin: 0px 0px 0px 0px;
-	height:200px;
-}
-#genbankDiv {
-	width:390px;
-	margin: 0px 0px 0px 0px;
-	height:400px;
-}
-
 table.gentable {
 		display: table;
 		width: 100%;
