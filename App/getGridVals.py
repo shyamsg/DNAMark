@@ -5,17 +5,17 @@ data_root = "/home/shyamsg/DNAMark/App/data/"
 def getOccurrencesCoords(skingdom, sphylum, sclass, sorder, sfamily, sgenus, sspecies):
     """This function gets the occurrences so that match the chosen criteria.
     """
-    KINCOL = 22
-    PHYCOL = 23
-    CLACOL = 24
-    ORDCOL = 25
-    FAMCOL = 26
-    GENCOL = 27
-    SPECOL = 28
-    LATCOL = 16
-    LNGCOL = 17
+    KINCOL = 23
+    PHYCOL = 24
+    CLACOL = 25
+    ORDCOL = 26
+    FAMCOL = 27
+    GENCOL = 28
+    SPECOL = 29
+    LATCOL = 17
+    LNGCOL = 18
     DMDCOL = 1
-    CNTRYCOL = 12
+    CNTRYCOL = 13
     infile = data_root + "DNAmark_Masterfile_webpage.csv"
     fh = open(infile)
     header = fh.readline()
