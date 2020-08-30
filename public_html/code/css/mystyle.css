@@ -293,7 +293,7 @@ input[type=range]:focus::-ms-fill-upper {
     width: 360px;
     height: 675px;
     margin: 10px 2px 10px 2px;
-	float: left;
+    float: left;
 }
 #lab {
     font-size: 16;
@@ -323,26 +323,26 @@ input[type=range]:focus::-ms-fill-upper {
 */
 }
 table.gentable {
-		display: table;
-		width: 100%;
-		font: 100% arial, helvetica, sans-serif;
+	display: table;
+	width: 100%;
+	font: 100% arial, helvetica, sans-serif;
 }
 table.gentable thead, table.gentable tbody {
-		float: left;
-		width: 100%;
-		border: 1px solid black;
+	float: left;
+	width: 100%;
+	border: 1px solid black;
 }
 table.gentable tbody {
-		overflow: auto;
-		height: 470px;
+	overflow: auto;
+	height: 470px;
 }
 table.gentable tr {
-		width: 100%;
-		display: table;
+	width: 100%;
+	display: table;
 }
 table.gentable td, table.gentable th {
-		text-align: center;
-		border: 1px black;
+	text-align: center;
+	border: 1px black;
 }
 footer {
 	text-align: center;
