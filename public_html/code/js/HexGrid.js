@@ -286,12 +286,11 @@ HexOverlay.prototype.colorHexes = function () {
         if (Math.max(...this.counts_[row][col]) > 0) {
           this.hexagons_[row][col].setOptions({visible: true});
           var contentString = '<div class="info">'+
-              '<h3>Samples</h3>' +
-              '<p><font color="#ff0000" size="4"><b>Animalia:</b> ' + this.counts_[row][col][1] + '</font></p>' +
-              '<p><font color="#0000ff" size="4"><b>Fungi:<b>   ' + this.counts_[row][col][2] + '</font></p>' +
-              '<p><font color="#66ff66" size="4"><b>Plantae:<b> ' + this.counts_[row][col][3] + '</font></p>' +
-              '<p><font color="#000000" size="4"><b>NA:<b>      ' + this.counts_[row][col][0] + '</font></p>' +
-              '</div>';
+              '<h3>Samples</h3>';
+	  for (var tempIndex=0; tempIndex < kingdoms.length; tempIndex++) {
+            contentString += ('<p><font color="#22bb44" size="2"><b>' + kingdoms[tempIndex] + ':</b> ' + this.counts_[row][col][tempIndex+1] + '</font></p>');
+	  }
+          contentString += ('<p><font color="#666666" size="2"><b>NA:<b> ' + this.counts_[row][col][0] + '</font></p>' + '</div>');
           this.hexagons_[row][col]['info'] = contentString;
           this.hexagons_[row][col].addListener('click', function() {
             if (infoWindow) {
