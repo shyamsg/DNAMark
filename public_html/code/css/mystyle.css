@@ -47,7 +47,7 @@ h4 {
 a:link {
 	font-weight: bold;
 	text-decoration: none;
-	color: #0000FF;
+	color: #6666FF;
 	}
 .location {
 	font-style: italic;
@@ -57,11 +57,11 @@ a:link {
 a:visited {
 	font-weight: bold;
 	text-decoration: none;
-	color: #0000FF;
+	color: #6666FF;
 	}
 a:hover, a:focus, a:active {
 	text-decoration: underline;
-	color: #0000FF;
+	color: #6666FF;
 	}
 abbr {
 	border-bottom: none;
