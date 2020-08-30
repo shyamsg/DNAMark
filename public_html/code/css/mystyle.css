@@ -219,7 +219,8 @@ input[type=range]:focus::-ms-fill-upper {
 }
 #Dnamarklogo{
     float: left;
-    padding: 2px 80px 20px 80px;
+    padding: 2px 2px 2px 20px;
+    text-align: center;
 }
 #SearchBar{
     width: 1200px;
