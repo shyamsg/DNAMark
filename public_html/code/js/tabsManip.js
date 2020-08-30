@@ -43,8 +43,7 @@ function updateTableHTML() {
       if (gens[i] != "#N/A") {
 	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\">"+gens[i]+"</a></td>";
       } else {
-	  gens[i] = "Not available";
-	  htmlstr += "<td>"+gens[i]+"</td>";
+	  htmlstr += "<td>Not available</td>";
       }
   }
   htmlstr += "</table>"
