@@ -58,4 +58,4 @@ def getOccurrencesCoords(skingdom, sphylum, sclass, sorder, sfamily, sgenus, ssp
         gens.append(toks[GENCOL])
         fsts.append(toks[FASCOL])
     fh.close()
-    return (json.dumps((lats, lngs, kngs, dmds, countries, spcs), ensure_ascii=False))
+    return (json.dumps((lats, lngs, kngs, dmds, countries, spcs, gens, fsts), ensure_ascii=False))
