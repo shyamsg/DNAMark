@@ -24,18 +24,21 @@ function roundToTwo(x) {
 }
 
 function updateTableHTML() {
-  htmlstr = "<h3>Table of samples displayed on map</h3>";
+  htmlstr = "<h3>Table of selected samples</h3>";
   htmlstr += "<table style=\"width:100%\">";
-  htmlstr += "<tr><th>DNAmark ID</th><th>Species</th><th>Country</th><th>Latitude</th><th>Longitude</th><th>Genbank</th></tr>";
+  htmlstr += "<tr><th>DNAmark ID</th><th>Species</th><th>Country</th><th>Latitude</th>";
+  htmlstr += "<th>Longitude</th><th>Genbank</th><Assembly></tr>";
   const lats = overlay.returnArrays[0].map(parseFloat);//.map(roundToTwo);
   const lngs = overlay.returnArrays[1].map(parseFloat);//.map(roundToTwo);
   const kngs = overlay.returnArrays[2];
   const dmds = overlay.returnArrays[3];
   const cnts = overlay.returnArrays[4];
   const spcs = overlay.returnArrays[5];
+  const gens = overlay.returnArrays[6];
+  const fsts = overlay.returnArrays[7];
   var i;
   for (i = 0; i < lats.length; i++) {
-    htmlstr += "<tr><th>"+dmds[i]+"</th><th>"+spcs[i]+"</th><th>"+cnts[i]+"</th><th>"+lats[i]+"</th><th>"+lngs[i]+"</th><th>N/A</th></tr>";
+    htmlstr += "<tr><td>"+dmds[i]+"</td><td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td>"+lats[i]+"</td><td>"+lngs[i]+"</td><td>"+gens[i]+"</td><td>"+fsts[i]+"</td></tr>";
   }
   htmlstr += "</table>"
   $('#tablediv').html(htmlstr);
