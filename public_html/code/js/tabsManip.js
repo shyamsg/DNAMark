@@ -39,7 +39,7 @@ function updateTableHTML() {
   var i;
   for (i = 0; i < lats.length; i++) {
       htmlstr += "<tr><td><a href=\""+fsts[i]+"\">"+dmds[i]+"</a></td>";
-      htmlstr += "<td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td>"+lats[i]+", "+lngs[i]+"</td>";
+      htmlstr += "<td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td><a href=\"https://maps.google.com?q="+lats[i]+","+lngs[i]+"\">"+lats[i]+", "+lngs[i]+"</td>";
       if (gens[i] != "#N/A") {
 	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\">"+gens[i]+"</a></td>";
       } else {
