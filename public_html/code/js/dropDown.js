@@ -1747,7 +1747,7 @@ function initializeDropdowns () {
         $("#kingdom").append(opt);
     }
     $('#kingdom').change(function(){dropdownUpdated("kingdom")});
-    var select = $("#kingdom").prettyDropdown({width: 290});
+    var select = $("#kingdom").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1760,7 +1760,7 @@ function initializeDropdowns () {
         }
     }
     $('#phylum').change(function(){dropdownUpdated("phylum")});
-    select = $("#phylum").prettyDropdown({width: 290});
+    select = $("#phylum").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1773,7 +1773,7 @@ function initializeDropdowns () {
         }
     }
     $('#class').change(function(){dropdownUpdated("class")});
-    select = $("#class").prettyDropdown({width: 290});
+    select = $("#class").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1786,7 +1786,7 @@ function initializeDropdowns () {
         }
     }
     $('#order').change(function(){dropdownUpdated("order")});
-    select = $("#order").prettyDropdown({width: 290});
+    select = $("#order").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1799,7 +1799,7 @@ function initializeDropdowns () {
         }
     }
     $('#family').change(function(){dropdownUpdated("family")});
-    select = $("#family").prettyDropdown({width: 290});
+    select = $("#family").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1812,7 +1812,7 @@ function initializeDropdowns () {
         }
     }
     $('#genus').change(function(){dropdownUpdated("genus")});
-    select = $("#genus").prettyDropdown({width: 290});
+    select = $("#genus").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 
     var opt = new Option("", "Reset");
@@ -1825,7 +1825,7 @@ function initializeDropdowns () {
         }
     }
     $('#species').change(function(){dropdownUpdated("species")});
-    select = $("#species").prettyDropdown({width: 290});
+    select = $("#species").prettyDropdown({width: 360});
     prettyDropdownList.push(select);
 }
 
