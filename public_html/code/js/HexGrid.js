@@ -265,7 +265,10 @@ HexOverlay.prototype.colorHexes = function () {
   for (var row=0; row < this.hexagons_.length; row++) {
     this.counts_.push([]);
     for (var col=0; col < this.hexagons_[row].length; col++) {
-      this.counts_[row].push([0,0,0,0]);
+      this.counts_[row] = [];
+      for (var tempIndex=0; tempIndex <= kingdoms.length; tempIndex++) {
+        this.counts_[row].push(0);  
+      }
     }
   }
   const lats = this.returnArrays[0].map(parseFloat);
@@ -284,10 +287,10 @@ HexOverlay.prototype.colorHexes = function () {
           this.hexagons_[row][col].setOptions({visible: true});
           var contentString = '<div class="info">'+
               '<h3>Samples</h3>' +
-              '<p><font color="#ff0000" size="4"><b>Animalia:</b> ' + this.counts_[row][col][1] + '</font></p>' +
-              '<p><font color="#0000ff" size="4"><b>Fungi:<b>   ' + this.counts_[row][col][2] + '</font></p>' +
-              '<p><font color="#66ff66" size="4"><b>Plantae:<b> ' + this.counts_[row][col][3] + '</font></p>' +
-              '<p><font color="#000000" size="4"><b>NA:<b>      ' + this.counts_[row][col][0] + '</font></p>' +
+              '<p><font color="#ff0000" size="2"><b>Animalia:</b> ' + this.counts_[row][col][1] + '</font></p>' +
+              '<p><font color="#0000ff" size="2"><b>Fungi:<b>   ' + this.counts_[row][col][2] + '</font></p>' +
+              '<p><font color="#66ff66" size="2"><b>Plantae:<b> ' + this.counts_[row][col][3] + '</font></p>' +
+              '<p><font color="#000000" size="2"><b>NA:<b>      ' + this.counts_[row][col][0] + '</font></p>' +
               '</div>';
           this.hexagons_[row][col]['info'] = contentString;
           this.hexagons_[row][col].addListener('click', function() {
