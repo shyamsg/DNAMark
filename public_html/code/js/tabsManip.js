@@ -26,10 +26,10 @@ function roundToTwo(x) {
 function updateTableHTML() {
   htmlstr = "<h3>Table of selected samples</h3>";
   htmlstr += "<table style=\"width:100%\">";
-  htmlstr += "<tr><th>DNAmark ID</th><th>Species</th><th>Country</th><th>Latitude</th>";
-  htmlstr += "<th>Longitude</th><th>Genbank</th><Assembly></tr>";
-  const lats = overlay.returnArrays[0].map(parseFloat);//.map(roundToTwo);
-  const lngs = overlay.returnArrays[1].map(parseFloat);//.map(roundToTwo);
+  htmlstr += "<tr><th>DNAmark ID</th><th>Species</th><th>Country</th><th>Lat, Lng</th>";
+  htmlstr += "<th>Genbank</th></tr>";
+  const lats = overlay.returnArrays[0].map(parseFloat).map(roundToTwo);
+  const lngs = overlay.returnArrays[1].map(parseFloat).map(roundToTwo);
   const kngs = overlay.returnArrays[2];
   const dmds = overlay.returnArrays[3];
   const cnts = overlay.returnArrays[4];
@@ -38,7 +38,14 @@ function updateTableHTML() {
   const fsts = overlay.returnArrays[7];
   var i;
   for (i = 0; i < lats.length; i++) {
-    htmlstr += "<tr><td>"+dmds[i]+"</td><td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td>"+lats[i]+"</td><td>"+lngs[i]+"</td><td>"+gens[i]+"</td><td>"+fsts[i]+"</td></tr>";
+      htmlstr += "<tr><td><a href=\""+fsts[i]+"\">"+dmds[i]+"</a></td>";
+      htmlstr += "<td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td>"+lats[i]+", "+lngs[i]+"</td>";
+      if (gens[i] != "#N/A") {
+	  gens[i] = "Not available";
+	  htmlstr += "<td>"+gens[i]+"</td>";
+      } else {
+	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\""+gens[i]+"</a></td>";
+      }
   }
   htmlstr += "</table>"
   $('#tablediv').html(htmlstr);
