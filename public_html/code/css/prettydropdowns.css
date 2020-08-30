@@ -1,7 +1,6 @@
 .prettydropdown {
   position: relative;
   min-width: 292px; /* 290px (for species) + borders */
-  max-width: 292px; /* 290px (for species) + borders */
   display: inline-block;
 }
 .prettydropdown.loading {
@@ -35,7 +34,7 @@
   border-color: #7f7f7f;
 }
 .prettydropdown:not(.disabled) > ul.active {
-  width: auto;
+  width: 292px;
   max-height: none !important;
   border-color: #1e90ff;
   overflow-x: hidden;
