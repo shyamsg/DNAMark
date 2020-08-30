@@ -16,7 +16,7 @@ def getOccurrencesCoords(skingdom, sphylum, sclass, sorder, sfamily, sgenus, ssp
     LNGCOL = 18
     DMDCOL = 1
     CNTRYCOL = 13
-    GENCOL = 31
+    GBKCOL = 31
     FASCOL = 32
     infile = data_root + "DNAmark_Masterfile_webpage.csv"
     fh = open(infile)
@@ -29,7 +29,7 @@ def getOccurrencesCoords(skingdom, sphylum, sclass, sorder, sfamily, sgenus, ssp
     countries = []
     dmds = []
     spcs = []
-    gens = []
+    gbks = []
     fsts = []
     for line in fh:
         toks = line.strip().split(';')
@@ -55,7 +55,7 @@ def getOccurrencesCoords(skingdom, sphylum, sclass, sorder, sfamily, sgenus, ssp
         countries.append(toks[CNTRYCOL])
         dmds.append(toks[DMDCOL])
         spcs.append(toks[SPECOL])
-        gens.append(toks[GENCOL])
+        gbks.append(toks[GBKCOL])
         fsts.append(toks[FASCOL])
     fh.close()
-    return (json.dumps((lats, lngs, kngs, dmds, countries, spcs, gens, fsts), ensure_ascii=False))
+    return (json.dumps((lats, lngs, kngs, dmds, countries, spcs, gbks, fsts), ensure_ascii=False))

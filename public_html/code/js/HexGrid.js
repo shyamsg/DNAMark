@@ -275,7 +275,6 @@ HexOverlay.prototype.colorHexes = function () {
   const lngs = this.returnArrays[1].map(parseFloat);
   const kngs = this.returnArrays[2];
   const dmds = this.returnArrays[3];
-  const countries = this.returnArrays[4];
   updateTableHTML();
   for (var index = 0; index < lats.length; index++) {
     this.updateCounts(lats[index], lngs[index], kngs[index]);
