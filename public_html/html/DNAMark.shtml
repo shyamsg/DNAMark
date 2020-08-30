@@ -22,8 +22,8 @@
     <script src="/code/js/d3.min.js"></script>
     <script src="/code/js/hexbin.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=geometry"></script>
-    <script src="/code/js/HexGrid.js"></script>
     <script src="/code/js/dropDown.js"></script>
+    <script src="/code/js/HexGrid.js"></script>
     <script>
       google.maps.event.addDomListener(window, 'load', initMap);
       $(document).ready(function() {
