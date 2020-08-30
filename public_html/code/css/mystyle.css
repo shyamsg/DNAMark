@@ -218,6 +218,7 @@ input[type=range]:focus::-ms-fill-upper {
     float: left;
 }
 #Dnamarklogo{
+    width: 360px;
     float: left;
     padding: 2px 2px 2px 20px;
     text-align: center;
