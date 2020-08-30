@@ -12,7 +12,7 @@
     oOptions = $.extend({
       classic: false,
       customClass: 'arrow',
-      width: 250,
+      width: null,
       height: 50,
       hoverIntent: 200,
       multiDelimiter: '; ',
