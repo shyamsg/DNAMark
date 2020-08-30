@@ -286,9 +286,9 @@ HexOverlay.prototype.colorHexes = function () {
         if (Math.max(...this.counts_[row][col]) > 0) {
           this.hexagons_[row][col].setOptions({visible: true});
           var contentString = '<div class="info">'+
-              '<h3>Samples</h3>';
+              '<h4>Samples</h4>';
 	  for (var tempIndex=0; tempIndex < kingdoms.length; tempIndex++) {
-            contentString += ('<p><font color="#22bb44" size="2"><b>' + kingdoms[tempIndex] + ':</b> ' + this.counts_[row][col][tempIndex+1] + '</font></p>');
+            contentString += ('<font color="#22bb44" size="2"><b>' + kingdoms[tempIndex] + ':</b> ' + this.counts_[row][col][tempIndex+1] + '</font><br/>');
 	  }
           contentString += ('<p><font color="#666666" size="2"><b>NA:<b> ' + this.counts_[row][col][0] + '</font></p>' + '</div>');
           this.hexagons_[row][col]['info'] = contentString;
