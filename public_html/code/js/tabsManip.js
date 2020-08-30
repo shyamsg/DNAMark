@@ -40,11 +40,11 @@ function updateTableHTML() {
   for (i = 0; i < lats.length; i++) {
       htmlstr += "<tr><td><a href=\""+fsts[i]+"\">"+dmds[i]+"</a></td>";
       htmlstr += "<td>"+spcs[i]+"</td><td>"+cnts[i]+"</td><td>"+lats[i]+", "+lngs[i]+"</td>";
-      if (gens[i] == "#N/A") {
+      if (gens[i] != "#N/A") {
+	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\">"+gens[i]+"</a></td>";
+      } else {
 	  gens[i] = "Not available";
 	  htmlstr += "<td>"+gens[i]+"</td>";
-      } else {
-	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\">"+gens[i]+"</a></td>";
       }
   }
   htmlstr += "</table>"
