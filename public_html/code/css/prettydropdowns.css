@@ -1,6 +1,7 @@
 .prettydropdown {
   position: relative;
   min-width: 352px; /* 290px (for species) + borders */
+  width: 360px;
   display: inline-block;
 }
 .prettydropdown.loading {
