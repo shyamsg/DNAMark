@@ -44,7 +44,7 @@ function updateTableHTML() {
 	  gens[i] = "Not available";
 	  htmlstr += "<td>"+gens[i]+"</td>";
       } else {
-	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\""+gens[i]+"</a></td>";
+	  htmlstr += "<td><a href=\"https://www.ncbi.nlm.nih.gov/nuccore/"+gens[i]+"\">"+gens[i]+"</a></td>";
       }
   }
   htmlstr += "</table>"
