@@ -285,7 +285,7 @@ HexOverlay.prototype.colorHexes = function () {
         if (Math.max(...this.counts_[row][col]) > 0) {
           this.hexagons_[row][col].setOptions({visible: true});
           var contentString = '<div class="info">'+
-              '<h4>Samples</h4>';
+              '<b>Samples</b><br/>';
 	  for (var tempIndex=0; tempIndex < kingdoms.length; tempIndex++) {
             contentString += ('<font color="#22bb44" size="2"><b>' + kingdoms[tempIndex] + ':</b> ' + this.counts_[row][col][tempIndex+1] + '</font><br/>');
 	  }
