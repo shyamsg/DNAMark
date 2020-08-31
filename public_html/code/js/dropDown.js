@@ -1931,41 +1931,41 @@ function dropdownUpdated(elementName){
     // update the selects above
     if (elNum > 0) {
         var chosenIndex = (prettyDropdownList[elNum][0]).selectedIndex;
-        if (chosenIndex == 0) {
-            return(null);
-        }
-        var chosenParent = "";
-        var chosenVal = (prettyDropdownList[elNum][0]).options[(prettyDropdownList[elNum][0]).selectedIndex].value;
-        // this selects name list.
-        var currentTaxaList = nameLists[elNum];
-        // first empty the current select
-        var numOpts = (prettyDropdownList[elNum][0]).options.length;
-        for (var i = 1; i < numOpts; i++) {
-            (prettyDropdownList[elNum][0]).options.remove(1);
-        }
-        // iterate over this selects taxa list
-        // if the chosenTaxon is present in a key, then
-        // that key is what we want to propagate
-        for (var curTaxon in currentTaxaList) {
-            // found the list of items which has the chosenTaxon,
-            // so build this select up, and then call the parent's thing
-            var taxonIndex = currentTaxaList[curTaxon].indexOf(chosenVal);
-            if ( taxonIndex >= 0) {
-                chosenParent = curTaxon;
-                var chosenTaxonList = currentTaxaList[curTaxon];
-                numOpts = chosenTaxonList.length;
-                for (var i = 0; i < numOpts; i++){
-                    // add all the options
-                    var opt = new Option(chosenTaxonList[i], chosenTaxonList[i]);
-                    (prettyDropdownList[elNum][0]).append(opt);
-                }
-                // set selected
-                document.getElementById(taxonomyLevels[elNum]).selectedIndex = (taxonIndex+1);
-                (prettyDropdownList[elNum]).refresh();
-                break;
-            }
-        }
-        updateDropdownsAbove(elNum-1, chosenParent);
+	// Only update the parent if the chosen Index is not zero.
+        if (chosenIndex != 0) {
+          var chosenParent = "";
+          var chosenVal = (prettyDropdownList[elNum][0]).options[(prettyDropdownList[elNum][0]).selectedIndex].value;
+          // this selects name list.
+          var currentTaxaList = nameLists[elNum];
+          // first empty the current select
+          var numOpts = (prettyDropdownList[elNum][0]).options.length;
+          for (var i = 1; i < numOpts; i++) {
+              (prettyDropdownList[elNum][0]).options.remove(1);
+          }
+          // iterate over this selects taxa list
+          // if the chosenTaxon is present in a key, then
+          // that key is what we want to propagate
+          for (var curTaxon in currentTaxaList) {
+              // found the list of items which has the chosenTaxon,
+              // so build this select up, and then call the parent's thing
+              var taxonIndex = currentTaxaList[curTaxon].indexOf(chosenVal);
+              if ( taxonIndex >= 0) {
+                  chosenParent = curTaxon;
+                  var chosenTaxonList = currentTaxaList[curTaxon];
+                  numOpts = chosenTaxonList.length;
+                  for (var i = 0; i < numOpts; i++){
+                      // add all the options
+                      var opt = new Option(chosenTaxonList[i], chosenTaxonList[i]);
+                      (prettyDropdownList[elNum][0]).append(opt);
+                  }
+                  // set selected
+                  document.getElementById(taxonomyLevels[elNum]).selectedIndex = (taxonIndex+1);
+                  (prettyDropdownList[elNum]).refresh();
+                  break;
+              }
+          }
+          updateDropdownsAbove(elNum-1, chosenParent);
+	}
     }
     $('#SampleSearch').val("");
     $.when(getOccurrence()).done(function () {
